@@ -2,29 +2,29 @@ package com.example.ecommerce.model;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name="categories")
-public class Category
+public class Category extends BaseEntity
 {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
     @Column(name="category_name", unique = true)
-    private @NotBlank String categoryName;
-    private @NotBlank String description;
-    private @NotBlank String imageUrl;
+    private @NotNull String categoryName;
+    private @NotNull String description;
+    private String imageUrl;
 
     public Category(){
 
     }
-    public Category(@NotBlank String categoryName, @NotBlank String description, @NotBlank String imageUrl) {
+    public Category(String categoryName, String description, String imageUrl) {
         super();
         this.categoryName = categoryName;
         this.description = description;
         this.imageUrl = imageUrl;
     }
-    public Category(@NotBlank String categoryName, @NotBlank String description) {
+    public Category(String categoryName, String description) {
         super();
         this.categoryName = categoryName;
         this.description = description;
@@ -33,6 +33,7 @@ public class Category
     public String toString() {
         return "User {category id=" + id + ", category name='" + categoryName + "', description='" + description + "'}";
     }
+    // getters setters
     public String getCategoryName() {
         return categoryName;
     }
@@ -57,11 +58,4 @@ public class Category
         this.imageUrl = imageUrl;
     }
 
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
 }

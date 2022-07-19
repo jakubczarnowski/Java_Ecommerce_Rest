@@ -3,6 +3,7 @@ package com.example.ecommerce.service;
 import com.example.ecommerce.model.Category;
 import com.example.ecommerce.repository.CategoryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
@@ -39,7 +40,7 @@ public class CategoryService {
         return categoryRepository.findAll();
     }
 
-    public void removeCategoryById(int id) {
+    public void removeCategoryById(String id) {
         Optional<Category> tempCategory = categoryRepository.findById(id);
         if(tempCategory.isEmpty()){
             throw new EntityNotFoundException();
@@ -47,7 +48,7 @@ public class CategoryService {
         categoryRepository.delete(tempCategory.get());
     }
 
-    public Category getCategoryById(int id){
+    public Category getCategoryById(String id){
         Optional<Category> tempCategory = categoryRepository.findById(id);
         if(tempCategory.isEmpty()){
             throw new EntityNotFoundException();
@@ -55,10 +56,10 @@ public class CategoryService {
         return tempCategory.get();
     }
 
-    public Category updateCategory(Integer id, Category category) {
-        Optional<Category> tempPlayer = categoryRepository.findById(id);
+    public Category updateCategory(String id, Category category) {
+        Optional<Category> tempCategory = categoryRepository.findById(id);
 
-        if(tempPlayer.isEmpty()){
+        if(tempCategory.isEmpty()){
             throw new EntityNotFoundException();
         }
         category.setId(id);

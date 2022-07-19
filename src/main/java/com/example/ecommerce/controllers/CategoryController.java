@@ -27,23 +27,22 @@ public class CategoryController {
     }
 
     @GetMapping("{id}")
-    public ResponseEntity<Category> getPlayer(@PathVariable int id){
+    public ResponseEntity<Category> getPlayer(@PathVariable String id){
         return new ResponseEntity<>(categoryService.getCategoryById(id), HttpStatus.FOUND);
     }
 
     @PostMapping
     public ResponseEntity<Category> createCategory(@Valid @RequestBody Category category){
-        category.setId(0);
         return new ResponseEntity<>(categoryService.createCategory(category), HttpStatus.CREATED);
     }
 
     @PutMapping("{id}")
-    public ResponseEntity<Category> updateCategory(@PathVariable Integer id, @Valid @RequestBody Category category){
+    public ResponseEntity<Category> updateCategory(@PathVariable String id, @Valid @RequestBody Category category){
         return new ResponseEntity<>(categoryService.updateCategory(id, category), HttpStatus.OK);
     }
 
     @DeleteMapping("{id}")
-    public ResponseEntity<ApiResponse> removeCategory(@PathVariable int id){
+    public ResponseEntity<ApiResponse> removeCategory(@PathVariable String id){
         categoryService.removeCategoryById(id);
         return new ResponseEntity<>(new ApiResponse(true, "Deleted succesfully"), HttpStatus.OK);
     }
