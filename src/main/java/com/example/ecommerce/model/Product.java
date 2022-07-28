@@ -12,32 +12,37 @@ import java.util.List;
 @Table(name="products")
 public class Product extends BaseEntity {
     private @NotNull String name;
-    private @NotNull double price;
-    private @NotNull String description;
-
     @Convert(converter = StringListConverter.class)
     private @NotNull List<String> imagesUrl;
+    private @NotNull String description;
+    private @NotNull Double price;
+
 
     @JsonIgnore
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "category_id", nullable = false)
-    private @NotNull Category category;
+    @ManyToOne(fetch= FetchType.LAZY, optional = false)
+    @JoinColumn(name="category_id", nullable = false)
+    Category category;
 
-    // Contructors
-
-    public Product(String name, List<String> imagesUrl, double price, String description, Category category) {
+    public Product(String name, List<String> imagesUrl, String description, Category category, Double price) {
         super();
         this.name = name;
         this.imagesUrl = imagesUrl;
         this.description = description;
-        this.price = price;
         this.category = category;
+        this.price = price;
     }
 
     public Product() {
 
     }
-    // getters setters
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
 
     public String getName() {
         return name;
@@ -46,26 +51,18 @@ public class Product extends BaseEntity {
     public void setName(String name) {
         this.name = name;
     }
-    public double getPrice() {
-        return price;
-    }
-
-    public void setPrice(double price) {
-        this.price = price;
-    }
 
     public List<String> getImagesUrl() {
         return imagesUrl;
-    }
-
-    public void addImage(String imageUrl){
-        this.imagesUrl.add(imageUrl);
     }
 
     public void setImagesUrl(List<String> imagesUrl) {
         this.imagesUrl = imagesUrl;
     }
 
+    public void addImage(String imageUrl){
+        this.imagesUrl.add(imageUrl);
+    }
     public String getDescription() {
         return description;
     }
@@ -73,12 +70,20 @@ public class Product extends BaseEntity {
     public void setDescription(String description) {
         this.description = description;
     }
+
     public Category getCategory() {
         return category;
     }
 
     public void setCategory(Category category) {
         this.category = category;
+    }
+    public Double getPrice() {
+        return price;
+    }
+
+    public void setPrice(Double price) {
+        this.price = price;
     }
 
 }

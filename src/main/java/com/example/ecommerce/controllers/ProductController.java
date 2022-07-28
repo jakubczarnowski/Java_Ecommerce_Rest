@@ -2,18 +2,15 @@ package com.example.ecommerce.controllers;
 
 import com.example.ecommerce.config.ApiResponse;
 import com.example.ecommerce.dto.product.ProductDto;
-import com.example.ecommerce.model.Category;
 import com.example.ecommerce.model.Product;
 import com.example.ecommerce.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.jmx.export.annotation.ManagedOperation;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
-import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/products")
@@ -32,12 +29,12 @@ public class ProductController {
     }
 
     @GetMapping("{id}")
-    public ResponseEntity<Product> getProduct(@PathVariable String id){
+    public ResponseEntity<Product> getProduct(@PathVariable Integer id){
         return new ResponseEntity<>(productService.getProductById(id), HttpStatus.FOUND);
     }
 
     @PutMapping("{id}")
-    public ResponseEntity<Product> updateProduct(@PathVariable String id, @Valid @RequestBody ProductDto product){
+    public ResponseEntity<Product> updateProduct(@PathVariable Integer id, @Valid @RequestBody ProductDto product){
         return new ResponseEntity<>(productService.updateProduct(id, product), HttpStatus.OK);
     }
 
@@ -47,7 +44,7 @@ public class ProductController {
     }
 
     @DeleteMapping("{id}")
-    public ResponseEntity<ApiResponse> deleteProduct(@Valid @PathVariable String id){
+    public ResponseEntity<ApiResponse> deleteProduct(@Valid @PathVariable Integer id){
         productService.removeProductById(id);
         return new ResponseEntity<>(new ApiResponse(true, "Product deleted"), HttpStatus.OK);
     }

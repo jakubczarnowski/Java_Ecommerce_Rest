@@ -16,13 +16,37 @@ import java.util.Optional;
 public class ProductService {
     private ProductRepository productRepository;
     private CategoryRepository categoryRepository;
-
     @Autowired
     public ProductService(ProductRepository productRepository, CategoryRepository categoryRepository) {
         this.productRepository = productRepository;
         this.categoryRepository = categoryRepository;
     }
 
+    public List<Product> getProducts(){
+        return productRepository.findAll();
+    }
+
+    public Product createProduct(Product product) {
+        product.setId(0);
+        return productRepository.save(product);
+    }
+    public Product createProductFromDto(ProductDto productDto, Category category){
+        Product updatedProduct = new Product();
+        updatedProduct.setName(productDto.getName());
+        updatedProduct.setDescription(productDto.getDescription());
+        updatedProduct.setImagesUrl(productDto.getImagesUrl());
+        updatedProduct.setPrice(productDto.getPrice());
+        updatedProduct.setCategory(category);
+        return updatedProduct;
+    }
+    // Get, {id}
+    public Product getProductById(Integer id){
+        Optional<Product> tempCategory = productRepository.findById(id);
+        if(tempCategory.isEmpty()){
+            throw new EntityNotFoundException();
+        }
+        return tempCategory.get();
+    }
     // Get all
     public List<Product> getProducts(int page, int size, String search){
 
@@ -42,7 +66,7 @@ public class ProductService {
         return productRepository.save(newProduct);
     }
     // Delete, {id}
-    public void removeProductById(String id) {
+    public void removeProductById(Integer id) {
         Optional<Product> tempCategory = productRepository.findById(id);
         if(tempCategory.isEmpty()){
             throw new EntityNotFoundException();
@@ -50,16 +74,7 @@ public class ProductService {
         productRepository.delete(tempCategory.get());
     }
 
-    // Get, {id}
-    public Product getProductById(String id){
-        Optional<Product> tempCategory = productRepository.findById(id);
-        if(tempCategory.isEmpty()){
-            throw new EntityNotFoundException();
-        }
-        return tempCategory.get();
-    }
-
-    public Product updateProduct(String id, ProductDto product) {
+    public Product updateProduct(Integer id, ProductDto product) {
         Optional<Product> tempProduct = productRepository.findById(id);
         Optional<Category> tempCategory = categoryRepository.findById(product.getCategoryId());
 
@@ -71,15 +86,5 @@ public class ProductService {
         }
         Product updatedProduct = createProductFromDto(product, tempCategory.get());
         return productRepository.save(updatedProduct);
-    }
-
-    public Product createProductFromDto(ProductDto productDto, Category category){
-        Product updatedProduct = new Product();
-        updatedProduct.setName(productDto.getName());
-        updatedProduct.setDescription(productDto.getDescription());
-        updatedProduct.setImagesUrl(productDto.getImagesUrl());
-        updatedProduct.setPrice(productDto.getPrice());
-        updatedProduct.setCategory(category);
-        return updatedProduct;
     }
 }

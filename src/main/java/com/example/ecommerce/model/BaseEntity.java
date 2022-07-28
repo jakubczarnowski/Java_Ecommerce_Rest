@@ -1,8 +1,6 @@
 package com.example.ecommerce.model;
 
-import com.example.ecommerce.model.generator.BaseIdentifierGenerator;
 import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
@@ -11,9 +9,8 @@ import java.time.Instant;
 @MappedSuperclass
 public abstract class BaseEntity {
     @Id
-    @GeneratedValue(generator = "custom-generator", strategy = GenerationType.IDENTITY)
-    @GenericGenerator(name="custom-generator", strategy = "com.example.ecommerce.model.generator.BaseIdentifierGenerator")
-    protected String id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    protected Integer id;
 
     @CreationTimestamp
     @Column(name="created_at", updatable = false, nullable = false)
@@ -23,11 +20,11 @@ public abstract class BaseEntity {
     @Column(name="modified_at")
     protected Instant modifiedAt;
 
-    public String getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
@@ -49,7 +46,7 @@ public abstract class BaseEntity {
 
     @Override
     public String toString(){
-        return id;
+        return id.toString();
     }
 
 }

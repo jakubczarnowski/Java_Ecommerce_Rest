@@ -8,6 +8,6 @@ import javax.validation.constraints.NotBlank;
 import java.util.Optional;
 
 @Repository
-public interface CategoryRepository extends JpaRepository<Category, String> {
+public interface CategoryRepository extends JpaRepository<Category, Integer> {
     Optional<Category> findByCategoryName(@NotBlank String categoryName);
 }

@@ -13,9 +13,9 @@ public class ProductDto extends BaseEntity {
     private @NotNull List<String> imagesUrl;
     private @NotNull double price;
     private @NotNull String description;
-    private @NotNull String categoryId;
+    private @NotNull Integer categoryId;
 
-    public ProductDto(@NotNull String name, @NotNull List<String> imagesURL, @NotNull double price, @NotNull String description, @NotNull String categoryId) {
+    public ProductDto(@NotNull String name, @NotNull List<String> imagesURL, @NotNull double price, @NotNull String description, @NotNull Integer categoryId) {
         this.name = name;
         this.imagesUrl = imagesURL;
         this.price = price;
@@ -67,11 +67,11 @@ public class ProductDto extends BaseEntity {
         this.description = description;
     }
 
-    public String getCategoryId() {
+    public Integer getCategoryId() {
         return categoryId;
     }
 
-    public void setCategoryId(String categoryId) {
+    public void setCategoryId(Integer categoryId) {
         this.categoryId = categoryId;
     }
 }

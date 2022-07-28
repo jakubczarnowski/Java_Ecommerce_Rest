@@ -3,8 +3,6 @@ package com.example.ecommerce.model;
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
-import java.util.ArrayList;
-import java.util.List;
 
 @Entity
 @Table(name="categories")
@@ -13,18 +11,39 @@ public class Category extends BaseEntity
     @Column(name="category_name", unique = true)
     private @NotNull String categoryName;
     private @NotNull String description;
-    private String imageUrl;
+    private @NotNull String imageUrl;
+
+
+    @ManyToOne
+    @JoinColumn(name="parent_id")
+    private Category parent;
+
+    public Category getParent() {
+        return parent;
+    }
+
+    public void setParent(Category parent) {
+        this.parent = parent;
+    }
 
     public Category(){
 
     }
-    public Category(String categoryName, String description, String imageUrl) {
+    public Category(@NotBlank String categoryName, @NotBlank String description, @NotBlank String imageUrl) {
         super();
         this.categoryName = categoryName;
         this.description = description;
         this.imageUrl = imageUrl;
     }
-    public Category(String categoryName, String description) {
+
+    public Category(String categoryName, String description, String imageUrl, Category parent) {
+        this.categoryName = categoryName;
+        this.description = description;
+        this.imageUrl = imageUrl;
+        this.parent = parent;
+    }
+
+    public Category(@NotBlank String categoryName, @NotBlank String description) {
         super();
         this.categoryName = categoryName;
         this.description = description;
@@ -33,7 +52,6 @@ public class Category extends BaseEntity
     public String toString() {
         return "User {category id=" + id + ", category name='" + categoryName + "', description='" + description + "'}";
     }
-    // getters setters
     public String getCategoryName() {
         return categoryName;
     }
@@ -58,4 +76,11 @@ public class Category extends BaseEntity
         this.imageUrl = imageUrl;
     }
 
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
 }
