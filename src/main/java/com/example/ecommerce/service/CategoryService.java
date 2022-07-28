@@ -7,9 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -43,24 +41,9 @@ public class CategoryService {
     public List<Category> getCategories(Integer parentId) {
         // powinno byc query ale na razie bedzie w ten sposob.
         List<Category> categories =  categoryRepository.findAll();
-        List<Category> filtered = new ArrayList<Category>();
-        for(Category category : categories){
-            if(findCategoryInTree(parentId, category)){
-                filtered.add(category);
-            }
-        }
-        return filtered;
+        return categories;
     }
-    private boolean findCategoryInTree(Integer parentId, Category category){
-        Category parentCategory = category.getParent();
-        if(parentCategory != null){
-            if(Objects.equals(parentCategory.getId(), parentId)){
-                return true;
-            }
-            return findCategoryInTree(parentId, parentCategory);
-        }
-        return false;
-    }
+
     public void removeCategoryById(int id) {
         Optional<Category> tempCategory = categoryRepository.findById(id);
         if(tempCategory.isEmpty()){
@@ -91,13 +74,18 @@ public class CategoryService {
         newCategory.setCategoryName(categoryDto.getCategoryName());
         newCategory.setDescription(categoryDto.getDescription());
         newCategory.setImageUrl(categoryDto.getImageUrl());
-        if(categoryDto.getParentId() != null){
-            Optional<Category> parentCategory = categoryRepository.findById(categoryDto.getParentId());
-            if(parentCategory.isEmpty()){
-                throw new EntityNotFoundException();
-            }
-            newCategory.setParent(parentCategory.get());
-        }
         return newCategory;
+    }
+
+    public void addChildCategory(Category newCategory, Integer parentId) {
+
+        Optional<Category> parentCategory = categoryRepository.findById(parentId);
+        if(parentCategory.isPresent()){
+            parentCategory.get().addChildCategory(newCategory);
+            categoryRepository.save(parentCategory.get());
+        }
+        else{
+            throw new EntityNotFoundException();
+        }
     }
 }

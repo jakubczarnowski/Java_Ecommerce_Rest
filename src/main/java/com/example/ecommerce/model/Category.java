@@ -3,6 +3,8 @@ package com.example.ecommerce.model;
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name="categories")
@@ -13,18 +15,12 @@ public class Category extends BaseEntity
     private @NotNull String description;
     private @NotNull String imageUrl;
 
+    @OneToMany(
+            cascade = CascadeType.ALL,
+            orphanRemoval = true
+    )
+    private List<Category> categoryChildren = new ArrayList<>();
 
-    @ManyToOne
-    @JoinColumn(name="parent_id")
-    private Category parent;
-
-    public Category getParent() {
-        return parent;
-    }
-
-    public void setParent(Category parent) {
-        this.parent = parent;
-    }
 
     public Category(){
 
@@ -34,13 +30,6 @@ public class Category extends BaseEntity
         this.categoryName = categoryName;
         this.description = description;
         this.imageUrl = imageUrl;
-    }
-
-    public Category(String categoryName, String description, String imageUrl, Category parent) {
-        this.categoryName = categoryName;
-        this.description = description;
-        this.imageUrl = imageUrl;
-        this.parent = parent;
     }
 
     public Category(@NotBlank String categoryName, @NotBlank String description) {
@@ -83,4 +72,19 @@ public class Category extends BaseEntity
     public void setId(Integer id) {
         this.id = id;
     }
+    public void addChildCategory(Category category){
+        this.categoryChildren.add(category);
+    }
+    public void deleteChildCategory(Category category){
+        this.categoryChildren.remove(category);
+    }
+
+    public List<Category> getCategoryChildren() {
+        return categoryChildren;
+    }
+
+    public void setCategoryChildren(List<Category> categoryChildren) {
+        this.categoryChildren = categoryChildren;
+    }
+
 }
