@@ -6,6 +6,7 @@ import javax.validation.constraints.NotNull;
 import java.util.List;
 
 public class ProductsGetDto {
+    private @NotNull Integer id;
     private @NotNull String name;
     private @NotNull List<String> imagesUrl;
     private @NotNull double price;
@@ -14,6 +15,7 @@ public class ProductsGetDto {
 
     // ProductDto from product
     public ProductsGetDto(Product product){
+        this.id = product.getId();
         this.name = product.getName();
         this.imagesUrl = product.getImagesUrl();
         this.price = product.getPrice();
@@ -21,7 +23,8 @@ public class ProductsGetDto {
         this.categoryId = product.getCategory().getId();
     }
 
-    public ProductsGetDto(String name, List<String> imagesUrl, double price, String description, Integer categoryId) {
+    public ProductsGetDto(Integer id, String name, List<String> imagesUrl, double price, String description, Integer categoryId) {
+        this.id = id;
         this.name = name;
         this.imagesUrl = imagesUrl;
         this.price = price;
@@ -67,5 +70,13 @@ public class ProductsGetDto {
 
     public void setCategoryId(Integer categoryId) {
         this.categoryId = categoryId;
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
     }
 }

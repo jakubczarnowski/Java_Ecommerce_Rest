@@ -10,7 +10,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.List;
 
 @RestController
 @RequestMapping("/category")
@@ -18,23 +17,20 @@ public class CategoryController {
     private CategoryService categoryService;
 
     @GetMapping
-    public ResponseEntity<List<Category>> getCategories(
-        @RequestParam(required = false, name = "parentId") Integer parentId
-    ){
-        return new ResponseEntity<>(categoryService.getCategories(parentId), HttpStatus.FOUND);
+    public ResponseEntity<Category> getCategories(){
+        // returns root category containing first level categories in category tree
+        return new ResponseEntity<>(categoryService.getCategoryById(1), HttpStatus.OK);
     }
 
     @GetMapping("{id}")
     public ResponseEntity<Category> getCategory(@PathVariable int id){
-        return new ResponseEntity<>(categoryService.getCategoryById(id), HttpStatus.FOUND);
+        return new ResponseEntity<>(categoryService.getCategoryById(id), HttpStatus.OK);
     }
 
     @PostMapping
     public ResponseEntity<Category> createCategory(@Valid @RequestBody CategoryDto category){
         Category newCategory = categoryService.createCategory(category);
-        if(category.getParentId()!=null){
-            categoryService.addChildCategory(newCategory, category.getParentId());
-        }
+        categoryService.addChildCategory(newCategory, category.getParentId());
         return new ResponseEntity<>(newCategory, HttpStatus.CREATED);
     }
 

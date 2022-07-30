@@ -60,8 +60,8 @@ public class ProductService {
             }
         }
         int productsSize = newProductList.size();
-        int listStart = (page-1)* productsSize;
-        int listEnd = Math.min(page * productsSize, productsSize); // productsSize < page * productsSize : returns products size
+        int listStart = (page-1)* size;
+        int listEnd = Math.min(page * size, productsSize); // productsSize < page * productsSize : returns products size
         return newProductList.subList(listStart, listEnd);
     }
     private Boolean categoryChildrenContainCategory(Integer categoryId, Category category){

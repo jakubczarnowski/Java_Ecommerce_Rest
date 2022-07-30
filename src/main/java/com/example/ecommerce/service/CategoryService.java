@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
-import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -36,12 +35,6 @@ public class CategoryService {
         Category newCategory = createCategoryFromDto(category);
         newCategory.setId(0);
         return categoryRepository.save(newCategory);
-    }
-
-    public List<Category> getCategories(Integer parentId) {
-        // powinno byc query ale na razie bedzie w ten sposob.
-        List<Category> categories =  categoryRepository.findAll();
-        return categories;
     }
 
     public void removeCategoryById(int id) {

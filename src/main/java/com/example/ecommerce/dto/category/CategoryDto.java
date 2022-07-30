@@ -8,7 +8,13 @@ public class CategoryDto extends BaseEntity {
     private @NotNull String categoryName;
     private @NotNull String description;
     private @NotNull String imageUrl;
-    private Integer parentId;
+    private Integer parentId = 1; // if not provided, automatically add to a root category
+
+    public CategoryDto(String categoryName, String description, String imageUrl) {
+        this.categoryName = categoryName;
+        this.description = description;
+        this.imageUrl = imageUrl;
+    }
 
     public CategoryDto() {
     }

@@ -27,12 +27,13 @@ public class ProductController {
             @RequestParam(required = false, name = "search", defaultValue = "") String search,
             @RequestParam(required = false, name="categoryId") Integer categoryId
     ){
-        return new ResponseEntity<>(productService.getProducts(page, size, search, categoryId), HttpStatus.FOUND);
+        System.out.println(size);
+        return new ResponseEntity<>(productService.getProducts(page, size, search, categoryId), HttpStatus.OK);
     }
 
     @GetMapping("{id}")
     public ResponseEntity<Product> getProduct(@PathVariable Integer id){
-        return new ResponseEntity<>(productService.getProductById(id), HttpStatus.FOUND);
+        return new ResponseEntity<>(productService.getProductById(id), HttpStatus.OK);
     }
 
     @PutMapping("{id}")
