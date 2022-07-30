@@ -1,6 +1,7 @@
 package com.example.ecommerce.service;
 
 import com.example.ecommerce.dto.product.ProductDto;
+import com.example.ecommerce.dto.product.ProductsGetDto;
 import com.example.ecommerce.model.Category;
 import com.example.ecommerce.model.Product;
 import com.example.ecommerce.repository.CategoryRepository;
@@ -9,8 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class ProductService {
@@ -48,12 +48,41 @@ public class ProductService {
         return tempCategory.get();
     }
     // Get all
-    public List<Product> getProducts(int page, int size, String search){
-
+    public List<ProductsGetDto> getProducts(int page, int size, String search, Integer categoryId){
         List<Product> productsList = productRepository.findAll();
-        return productsList;
+        List<ProductsGetDto> newProductList = new ArrayList<>();
+        // my own pagination solution, don't try this
+        // cant really figure it out the right way
+        for(Product product : productsList){
+            // category search
+            if((product.toString().contains(search.toLowerCase())) && (categoryChildrenContainCategory(categoryId, product.getCategory()))){
+                newProductList.add(new ProductsGetDto(product));
+            }
+        }
+        int productsSize = newProductList.size();
+        int listStart = (page-1)* productsSize;
+        int listEnd = Math.min(page * productsSize, productsSize); // productsSize < page * productsSize : returns products size
+        return newProductList.subList(listStart, listEnd);
     }
-
+    private Boolean categoryChildrenContainCategory(Integer categoryId, Category category){
+        if(categoryId==null){
+            return true;
+        }
+        List<Category> categoryChildren = category.getCategoryChildren();
+        if(category.getId() == categoryId){
+            return true;
+        }
+        if(categoryChildren.isEmpty()){
+            return false;
+        }
+        for(Category childCateogry : categoryChildren){
+            // recursive search
+            if(categoryChildrenContainCategory(categoryId, childCateogry)){
+                return true;
+            }
+        }
+        return false;
+    }
     // Post, creating product
     public Product createProduct(ProductDto product) {
         Optional<Category> tempCategory = categoryRepository.findById(product.getCategoryId());

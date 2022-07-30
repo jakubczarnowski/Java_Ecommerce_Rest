@@ -1,6 +1,5 @@
 package com.example.ecommerce.model;
 
-
 import com.example.ecommerce.model.converter.StringListConverter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -84,6 +83,11 @@ public class Product extends BaseEntity {
 
     public void setPrice(Double price) {
         this.price = price;
+    }
+
+    @Override
+    public String toString(){
+        return (this.name + this.description).toLowerCase();
     }
 
 }

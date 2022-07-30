@@ -2,6 +2,7 @@ package com.example.ecommerce.controllers;
 
 import com.example.ecommerce.config.ApiResponse;
 import com.example.ecommerce.dto.product.ProductDto;
+import com.example.ecommerce.dto.product.ProductsGetDto;
 import com.example.ecommerce.model.Product;
 import com.example.ecommerce.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,14 +19,15 @@ public class ProductController {
     ProductService productService;
 
     @GetMapping
-    public ResponseEntity<List<Product>> getProducts(
+    public ResponseEntity<List<ProductsGetDto>> getProducts(
             @RequestParam(required = false, name = "page",
-                    defaultValue = "0") int page,
+                    defaultValue = "1") int page,
             @RequestParam(required = false, name = "size",
                     defaultValue = "20") int size,
-            @RequestParam(required = false, name = "search") String search
+            @RequestParam(required = false, name = "search", defaultValue = "") String search,
+            @RequestParam(required = false, name="categoryId") Integer categoryId
     ){
-        return new ResponseEntity<>(productService.getProducts(page, size, search), HttpStatus.FOUND);
+        return new ResponseEntity<>(productService.getProducts(page, size, search, categoryId), HttpStatus.FOUND);
     }
 
     @GetMapping("{id}")
