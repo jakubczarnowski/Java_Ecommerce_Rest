@@ -18,7 +18,7 @@ public class EcommerceApplication {
 	public CommandLineRunner commandLineRunner(@Autowired CategoryRepository repository) {
 		return (args) -> {
 			try{
-				repository.save(new Category("root", "rootCategory", ""));
+				repository.save(new Category("root", "rootCategory", "", 1));
 			}catch(Exception e){
 
 			}

@@ -22,14 +22,6 @@ public class ProductService {
         this.categoryRepository = categoryRepository;
     }
 
-    public List<Product> getProducts(){
-        return productRepository.findAll();
-    }
-
-    public Product createProduct(Product product) {
-        product.setId(0);
-        return productRepository.save(product);
-    }
     public Product createProductFromDto(ProductDto productDto, Category category){
         Product updatedProduct = new Product();
         updatedProduct.setName(productDto.getName());
@@ -53,9 +45,14 @@ public class ProductService {
         List<ProductsGetDto> newProductList = new ArrayList<>();
         // my own pagination solution, don't try this
         // cant really figure it out the right way
+        Optional<Category> category = categoryRepository.findById(categoryId);
+        if(category.isEmpty()){
+            throw new EntityNotFoundException();
+        }
+        List<Integer> categoriesId = getInnerCategoriesId(category.get(), new ArrayList<Integer>());
         for(Product product : productsList){
             // category search
-            if((product.toString().contains(search.toLowerCase())) && (categoryChildrenContainCategory(categoryId, product.getCategory()))){
+            if((product.toString().contains(search.toLowerCase())) && (categoriesId.contains(product.getCategory().getId()))){
                 newProductList.add(new ProductsGetDto(product));
             }
         }
@@ -64,24 +61,18 @@ public class ProductService {
         int listEnd = Math.min(page * size, productsSize); // productsSize < page * productsSize : returns products size
         return newProductList.subList(listStart, listEnd);
     }
-    private Boolean categoryChildrenContainCategory(Integer categoryId, Category category){
-        if(categoryId==null){
-            return true;
-        }
+    private List<Integer> getInnerCategoriesId(Category category, List<Integer> categories){
+        categories.add(category.getId());
         List<Category> categoryChildren = category.getCategoryChildren();
-        if(category.getId() == categoryId){
-            return true;
+        if(categoryChildren == null){
+            return categories;
         }
-        if(categoryChildren.isEmpty()){
-            return false;
+        for(Category cat : categoryChildren){
+            categories.add(cat.getId());
+            List<Integer> innerCategories = getInnerCategoriesId(cat, new ArrayList<Integer>());
+            categories.addAll(innerCategories);
         }
-        for(Category childCateogry : categoryChildren){
-            // recursive search
-            if(categoryChildrenContainCategory(categoryId, childCateogry)){
-                return true;
-            }
-        }
-        return false;
+        return categories;
     }
     // Post, creating product
     public Product createProduct(ProductDto product) {

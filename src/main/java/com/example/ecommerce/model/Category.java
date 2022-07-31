@@ -21,15 +21,17 @@ public class Category extends BaseEntity
     )
     private List<Category> categoryChildren = new ArrayList<>();
 
+    private @NotNull Integer parentCategoryId;
 
     public Category(){
 
     }
-    public Category(@NotBlank String categoryName, @NotBlank String description, @NotBlank String imageUrl) {
+    public Category(@NotBlank String categoryName, @NotBlank String description, @NotBlank String imageUrl, @NotBlank Integer parentCategoryId) {
         super();
         this.categoryName = categoryName;
         this.description = description;
         this.imageUrl = imageUrl;
+        this.parentCategoryId = parentCategoryId;
     }
 
     public Category(@NotBlank String categoryName, @NotBlank String description) {
@@ -87,4 +89,11 @@ public class Category extends BaseEntity
         this.categoryChildren = categoryChildren;
     }
 
+    public Integer getParentCategoryId() {
+        return parentCategoryId;
+    }
+
+    public void setParentCategoryId(Integer parentCategoryId) {
+        this.parentCategoryId = parentCategoryId;
+    }
 }

@@ -38,11 +38,19 @@ public class CategoryService {
     }
 
     public void removeCategoryById(int id) {
+        if(id==1){
+            // TODO Exception handling
+            // Can't remove root category
+            throw new EntityNotFoundException();
+        }
         Optional<Category> tempCategory = categoryRepository.findById(id);
         if(tempCategory.isEmpty()){
             throw new EntityNotFoundException();
         }
-        categoryRepository.delete(tempCategory.get());
+        Integer parentId = tempCategory.get().getParentCategoryId();
+        Optional<Category> parentTemp = categoryRepository.findById(parentId);
+        parentTemp.get().deleteChildCategory(tempCategory.get());
+        categoryRepository.save(parentTemp.get());
     }
 
     public Category getCategoryById(int id){
@@ -67,6 +75,7 @@ public class CategoryService {
         newCategory.setCategoryName(categoryDto.getCategoryName());
         newCategory.setDescription(categoryDto.getDescription());
         newCategory.setImageUrl(categoryDto.getImageUrl());
+        newCategory.setParentCategoryId(categoryDto.getParentId());
         return newCategory;
     }
 
