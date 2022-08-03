@@ -14,7 +14,7 @@ public class ProductsGetDto {
     private @NotNull Integer categoryId;
 
     // ProductDto from product
-    public ProductsGetDto(Product product){
+    public ProductsGetDto(Product product) {
         this.id = product.getId();
         this.name = product.getName();
         this.imagesUrl = product.getImagesUrl();

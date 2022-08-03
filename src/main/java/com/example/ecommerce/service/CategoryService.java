@@ -13,23 +13,20 @@ import java.util.Optional;
 public class CategoryService {
     CategoryRepository categoryRepository;
 
-    public boolean categoryWithNameExists(String categoryName){
+    public boolean categoryWithNameExists(String categoryName) {
         Optional<Category> tempCategory = categoryRepository.findByCategoryName(categoryName);
-        if(tempCategory.isEmpty()){
-            // do zmiany na wlasne
-            return false;
-        }
-        return true;
+        // do zmiany na wlasne
+        return tempCategory.isPresent();
     }
 
     @Autowired
-    public CategoryService(CategoryRepository categoryRepository){
+    public CategoryService(CategoryRepository categoryRepository) {
         super();
         this.categoryRepository = categoryRepository;
     }
 
     public Category createCategory(CategoryDto category) {
-        if(categoryWithNameExists(category.getCategoryName())){
+        if (categoryWithNameExists(category.getCategoryName())) {
             // wyslac powiadomienie w postaci exception ze juz istnieje
         }
         Category newCategory = createCategoryFromDto(category);
@@ -38,13 +35,13 @@ public class CategoryService {
     }
 
     public void removeCategoryById(int id) {
-        if(id==1){
+        if (id == 1) {
             // TODO Exception handling
             // Can't remove root category
             throw new EntityNotFoundException();
         }
         Optional<Category> tempCategory = categoryRepository.findById(id);
-        if(tempCategory.isEmpty()){
+        if (tempCategory.isEmpty()) {
             throw new EntityNotFoundException();
         }
         Integer parentId = tempCategory.get().getParentCategoryId();
@@ -53,9 +50,9 @@ public class CategoryService {
         categoryRepository.save(parentTemp.get());
     }
 
-    public Category getCategoryById(int id){
+    public Category getCategoryById(int id) {
         Optional<Category> tempCategory = categoryRepository.findById(id);
-        if(tempCategory.isEmpty()){
+        if (tempCategory.isEmpty()) {
             throw new EntityNotFoundException();
         }
         return tempCategory.get();
@@ -63,14 +60,15 @@ public class CategoryService {
 
     public Category updateCategory(Integer id, CategoryDto category) {
         Optional<Category> tempCategory = categoryRepository.findById(id);
-        if(tempCategory.isEmpty()){
+        if (tempCategory.isEmpty()) {
             throw new EntityNotFoundException();
         }
         Category newCategory = createCategoryFromDto(category);
         newCategory.setId(id);
         return categoryRepository.save(newCategory);
     }
-    private Category createCategoryFromDto(CategoryDto categoryDto){
+
+    private Category createCategoryFromDto(CategoryDto categoryDto) {
         Category newCategory = new Category();
         newCategory.setCategoryName(categoryDto.getCategoryName());
         newCategory.setDescription(categoryDto.getDescription());
@@ -82,11 +80,10 @@ public class CategoryService {
     public void addChildCategory(Category newCategory, Integer parentId) {
 
         Optional<Category> parentCategory = categoryRepository.findById(parentId);
-        if(parentCategory.isPresent()){
+        if (parentCategory.isPresent()) {
             parentCategory.get().addChildCategory(newCategory);
             categoryRepository.save(parentCategory.get());
-        }
-        else{
+        } else {
             throw new EntityNotFoundException();
         }
     }

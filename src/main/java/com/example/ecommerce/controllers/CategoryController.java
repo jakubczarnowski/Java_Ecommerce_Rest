@@ -14,33 +14,35 @@ import javax.validation.Valid;
 @RestController
 @RequestMapping("/category")
 public class CategoryController {
-    private CategoryService categoryService;
+    private final CategoryService categoryService;
 
     @GetMapping
-    public ResponseEntity<Category> getCategories(){
+    public ResponseEntity<Category> getCategories() {
         // returns root category containing first level categories in category tree
         return new ResponseEntity<>(categoryService.getCategoryById(1), HttpStatus.OK);
     }
 
     @GetMapping("{id}")
-    public ResponseEntity<Category> getCategory(@PathVariable int id){
+    public ResponseEntity<Category> getCategory(@PathVariable int id) {
         return new ResponseEntity<>(categoryService.getCategoryById(id), HttpStatus.OK);
     }
 
+    // Authorized
+
     @PostMapping
-    public ResponseEntity<Category> createCategory(@Valid @RequestBody CategoryDto category){
+    public ResponseEntity<Category> createCategory(@Valid @RequestBody CategoryDto category) {
         Category newCategory = categoryService.createCategory(category);
         categoryService.addChildCategory(newCategory, category.getParentId());
         return new ResponseEntity<>(newCategory, HttpStatus.CREATED);
     }
 
     @PutMapping("{id}")
-    public ResponseEntity<Category> updateCategory(@PathVariable Integer id, @Valid @RequestBody CategoryDto category){
+    public ResponseEntity<Category> updateCategory(@PathVariable Integer id, @Valid @RequestBody CategoryDto category) {
         return new ResponseEntity<>(categoryService.updateCategory(id, category), HttpStatus.OK);
     }
 
     @DeleteMapping("{id}")
-    public ResponseEntity<ApiResponse> removeCategory(@PathVariable int id){
+    public ResponseEntity<ApiResponse> removeCategory(@PathVariable int id) {
         categoryService.removeCategoryById(id);
         return new ResponseEntity<>(new ApiResponse(true, "Deleted succesfully"), HttpStatus.OK);
     }

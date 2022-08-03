@@ -25,34 +25,35 @@ public class ProductController {
             @RequestParam(required = false, name = "size",
                     defaultValue = "20") int size,
             @RequestParam(required = false, name = "search", defaultValue = "") String search,
-            @RequestParam(required = false, name="categoryId") Integer categoryId
-    ){
+            @RequestParam(required = false, name = "categoryId", defaultValue = "1") Integer categoryId
+    ) {
         System.out.println(size);
         return new ResponseEntity<>(productService.getProducts(page, size, search, categoryId), HttpStatus.OK);
     }
 
     @GetMapping("{id}")
-    public ResponseEntity<Product> getProduct(@PathVariable Integer id){
+    public ResponseEntity<Product> getProduct(@PathVariable Integer id) {
         return new ResponseEntity<>(productService.getProductById(id), HttpStatus.OK);
     }
 
     @PutMapping("{id}")
-    public ResponseEntity<Product> updateProduct(@PathVariable Integer id, @Valid @RequestBody ProductDto product){
+    public ResponseEntity<Product> updateProduct(@PathVariable Integer id, @Valid @RequestBody ProductDto product) {
         return new ResponseEntity<>(productService.updateProduct(id, product), HttpStatus.OK);
     }
 
     @PostMapping
-    public ResponseEntity<Product> createProduct(@Valid @RequestBody ProductDto product){
+    public ResponseEntity<Product> createProduct(@Valid @RequestBody ProductDto product) {
         return new ResponseEntity<>(productService.createProduct(product), HttpStatus.CREATED);
     }
 
     @DeleteMapping("{id}")
-    public ResponseEntity<ApiResponse> deleteProduct(@Valid @PathVariable Integer id){
+    public ResponseEntity<ApiResponse> deleteProduct(@Valid @PathVariable Integer id) {
         productService.removeProductById(id);
         return new ResponseEntity<>(new ApiResponse(true, "Product deleted"), HttpStatus.OK);
     }
+
     @Autowired
-    public ProductController(ProductService service){
+    public ProductController(ProductService service) {
         this.productService = service;
     }
 }

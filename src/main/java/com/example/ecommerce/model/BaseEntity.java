@@ -13,11 +13,11 @@ public abstract class BaseEntity {
     protected Integer id;
 
     @CreationTimestamp
-    @Column(name="created_at", updatable = false, nullable = false)
+    @Column(name = "created_at", updatable = false, nullable = false)
     protected Instant createdAt;
 
     @UpdateTimestamp
-    @Column(name="modified_at")
+    @Column(name = "modified_at")
     protected Instant modifiedAt;
 
     public Integer getId() {
@@ -45,7 +45,7 @@ public abstract class BaseEntity {
     }
 
     @Override
-    public String toString(){
+    public String toString() {
         return id.toString();
     }
 

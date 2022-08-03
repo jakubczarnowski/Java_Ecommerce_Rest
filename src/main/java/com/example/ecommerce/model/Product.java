@@ -8,7 +8,7 @@ import javax.validation.constraints.NotNull;
 import java.util.List;
 
 @Entity
-@Table(name="products")
+@Table(name = "products")
 public class Product extends BaseEntity {
     private @NotNull String name;
     @Convert(converter = StringListConverter.class)
@@ -18,8 +18,8 @@ public class Product extends BaseEntity {
 
 
     @JsonIgnore
-    @ManyToOne(fetch= FetchType.LAZY, optional = false)
-    @JoinColumn(name="category_id", nullable = false)
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "category_id", nullable = false)
     Category category;
 
     public Product(String name, List<String> imagesUrl, String description, Category category, Double price) {
@@ -59,9 +59,10 @@ public class Product extends BaseEntity {
         this.imagesUrl = imagesUrl;
     }
 
-    public void addImage(String imageUrl){
+    public void addImage(String imageUrl) {
         this.imagesUrl.add(imageUrl);
     }
+
     public String getDescription() {
         return description;
     }
@@ -77,6 +78,7 @@ public class Product extends BaseEntity {
     public void setCategory(Category category) {
         this.category = category;
     }
+
     public Double getPrice() {
         return price;
     }
@@ -86,7 +88,7 @@ public class Product extends BaseEntity {
     }
 
     @Override
-    public String toString(){
+    public String toString() {
         return (this.name + this.description).toLowerCase();
     }
 
