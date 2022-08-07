@@ -1,12 +1,12 @@
 package com.example.ecommerce.service;
 
 import com.example.ecommerce.dto.category.CategoryDto;
+import com.example.ecommerce.exceptions.NotFoundException;
 import com.example.ecommerce.model.Category;
 import com.example.ecommerce.repository.CategoryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.persistence.EntityNotFoundException;
 import java.util.Optional;
 
 @Service
@@ -36,13 +36,12 @@ public class CategoryService {
 
     public void removeCategoryById(int id) {
         if (id == 1) {
-            // TODO Exception handling
             // Can't remove root category
-            throw new EntityNotFoundException();
+            throw new NotFoundException("Can't remove root category");
         }
         Optional<Category> tempCategory = categoryRepository.findById(id);
         if (tempCategory.isEmpty()) {
-            throw new EntityNotFoundException();
+            throw new NotFoundException("Category with id " + id + " doesnt exist");
         }
         Integer parentId = tempCategory.get().getParentCategoryId();
         Optional<Category> parentTemp = categoryRepository.findById(parentId);
@@ -53,7 +52,7 @@ public class CategoryService {
     public Category getCategoryById(int id) {
         Optional<Category> tempCategory = categoryRepository.findById(id);
         if (tempCategory.isEmpty()) {
-            throw new EntityNotFoundException();
+            throw new NotFoundException("Category with id " + id + " doesnt exist");
         }
         return tempCategory.get();
     }
@@ -61,7 +60,7 @@ public class CategoryService {
     public Category updateCategory(Integer id, CategoryDto category) {
         Optional<Category> tempCategory = categoryRepository.findById(id);
         if (tempCategory.isEmpty()) {
-            throw new EntityNotFoundException();
+            throw new NotFoundException("Category with id " + id + " doesnt exist");
         }
         Category newCategory = createCategoryFromDto(category);
         newCategory.setId(id);
@@ -84,7 +83,7 @@ public class CategoryService {
             parentCategory.get().addChildCategory(newCategory);
             categoryRepository.save(parentCategory.get());
         } else {
-            throw new EntityNotFoundException();
+            throw new NotFoundException("Category with id " + parentId + " doesnt exist");
         }
     }
 }

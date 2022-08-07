@@ -1,12 +1,14 @@
 package com.example.ecommerce.model;
 
+import org.hibernate.annotations.SQLDelete;
+
 import javax.persistence.*;
 
 @Entity
 @Table(name = "roles", uniqueConstraints = {
         @UniqueConstraint(columnNames = "name"),
 })
-
+@SQLDelete(sql = "UPDATE roles SET deleted = true WHERE id=?")
 public class Role {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

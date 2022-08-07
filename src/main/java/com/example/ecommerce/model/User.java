@@ -1,5 +1,7 @@
 package com.example.ecommerce.model;
 
+import org.hibernate.annotations.SQLDelete;
+
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
@@ -12,13 +14,14 @@ import java.util.Set;
         @UniqueConstraint(columnNames = "username"),
         @UniqueConstraint(columnNames = "email")
 })
+@SQLDelete(sql = "UPDATE users SET deleted = true WHERE id=?")
 public class User extends BaseEntity {
     @NotBlank
-    @Size(max = 20)
+    @Size(min=3,max = 20)
     private String username;
     @NotBlank
     @Size(max = 50)
-    @Email
+    @Email(regexp = "^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$")
     private String email;
 
     @NotBlank
@@ -32,11 +35,19 @@ public class User extends BaseEntity {
     @NotBlank
     @Size(max = 120)
     private String password;
-    @ManyToMany(fetch = FetchType.LAZY)
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.DETACH)
     @JoinTable(	name = "user_roles",
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<Role> roles = new HashSet<>();
+
+    @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.DETACH, CascadeType.REFRESH})
+    @JoinTable(	name = "user_favorite",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "product_id"))
+    private Set<Product> favorite = new HashSet<>();
+
+
     public User() {
     }
     public User(String username, String email, String password, String name, String surname) {
@@ -86,4 +97,21 @@ public class User extends BaseEntity {
         this.surname = surname;
     }
 
+    public Set<Product> getFavorite() {
+        return favorite;
+    }
+
+    public void setFavorite(Set<Product> favorite) {
+        this.favorite = favorite;
+    }
+    public void addFavorite(Product product){
+        this.favorite.add(product);
+        product.addFavorite(this);
+    }
+
+    public void deleteFavorite(Product product){
+        this.favorite.remove(product);
+        product.removeFavorite(this);
+
+    }
 }

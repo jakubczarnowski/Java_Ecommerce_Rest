@@ -3,8 +3,8 @@ package com.example.ecommerce.model;
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "categories")
@@ -18,7 +18,7 @@ public class Category extends BaseEntity {
             cascade = CascadeType.ALL,
             orphanRemoval = true
     )
-    private List<Category> categoryChildren = new ArrayList<>();
+    private Set<Category> categoryChildren = new HashSet<>();
 
     private @NotNull Integer parentCategoryId;
 
@@ -85,11 +85,11 @@ public class Category extends BaseEntity {
         this.categoryChildren.remove(category);
     }
 
-    public List<Category> getCategoryChildren() {
+    public Set<Category> getCategoryChildren() {
         return categoryChildren;
     }
 
-    public void setCategoryChildren(List<Category> categoryChildren) {
+    public void setCategoryChildren(Set<Category> categoryChildren) {
         this.categoryChildren = categoryChildren;
     }
 

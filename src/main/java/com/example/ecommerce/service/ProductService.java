@@ -2,17 +2,16 @@ package com.example.ecommerce.service;
 
 import com.example.ecommerce.dto.product.ProductDto;
 import com.example.ecommerce.dto.product.ProductsGetDto;
+import com.example.ecommerce.exceptions.NotFoundException;
 import com.example.ecommerce.model.Category;
 import com.example.ecommerce.model.Product;
 import com.example.ecommerce.repository.CategoryRepository;
 import com.example.ecommerce.repository.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
-import javax.persistence.EntityNotFoundException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class ProductService {
@@ -39,7 +38,7 @@ public class ProductService {
     public Product getProductById(Integer id) {
         Optional<Product> tempCategory = productRepository.findById(id);
         if (tempCategory.isEmpty()) {
-            throw new EntityNotFoundException();
+            throw new NotFoundException("Product with id " + id + " doesnt exist");
         }
         return tempCategory.get();
     }
@@ -48,17 +47,19 @@ public class ProductService {
     public List<ProductsGetDto> getProducts(int page, int size, String search, Integer categoryId) {
         List<Product> productsList = productRepository.findAll();
         List<ProductsGetDto> newProductList = new ArrayList<>();
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
         // my own pagination solution, don't try this
         // cant really figure it out the right way
         Optional<Category> category = categoryRepository.findById(categoryId);
         if (category.isEmpty()) {
-            throw new EntityNotFoundException();
+            throw new NotFoundException("Category with id " + categoryId + " doesnt exist");
         }
-        List<Integer> categoriesId = getInnerCategoriesId(category.get(), new ArrayList<Integer>());
+        Set<Integer> categoriesId = getInnerCategoriesId(category.get(), new HashSet<Integer>());
         for (Product product : productsList) {
+            Boolean isFavorite = product.getUserFavorite().stream().anyMatch(user -> Objects.equals(user.getUsername(), username));
             // category search
             if ((product.toString().contains(search.toLowerCase())) && (categoriesId.contains(product.getCategory().getId()))) {
-                newProductList.add(new ProductsGetDto(product));
+                newProductList.add(new ProductsGetDto(product, isFavorite));
             }
         }
         int productsSize = newProductList.size();
@@ -67,15 +68,15 @@ public class ProductService {
         return newProductList.subList(listStart, listEnd);
     }
 
-    private List<Integer> getInnerCategoriesId(Category category, List<Integer> categories) {
+    private Set<Integer> getInnerCategoriesId(Category category, Set<Integer> categories) {
         categories.add(category.getId());
-        List<Category> categoryChildren = category.getCategoryChildren();
+        Set<Category> categoryChildren = category.getCategoryChildren();
         if (categoryChildren == null) {
             return categories;
         }
         for (Category cat : categoryChildren) {
             categories.add(cat.getId());
-            List<Integer> innerCategories = getInnerCategoriesId(cat, new ArrayList<Integer>());
+            Set<Integer> innerCategories = getInnerCategoriesId(cat, new HashSet<Integer>());
             categories.addAll(innerCategories);
         }
         return categories;
@@ -86,7 +87,7 @@ public class ProductService {
         Optional<Category> tempCategory = categoryRepository.findById(product.getCategoryId());
 
         if (tempCategory.isEmpty()) {
-            throw new EntityNotFoundException();
+            throw new NotFoundException("Category with id " + product.getCategoryId() + " doesnt exist");
         }
 
         Product newProduct = createProductFromDto(product, tempCategory.get());
@@ -95,11 +96,13 @@ public class ProductService {
 
     // Delete, {id}
     public void removeProductById(Integer id) {
-        Optional<Product> tempCategory = productRepository.findById(id);
-        if (tempCategory.isEmpty()) {
-            throw new EntityNotFoundException();
+        System.out.println("tutaj");
+        Optional<Product> tempProduct = productRepository.findById(id);
+        if (tempProduct.isEmpty()) {
+            throw new NotFoundException("Product with id " + id + " doesnt exist");
         }
-        productRepository.delete(tempCategory.get());
+        tempProduct.get().getUserFavorite().forEach(user->user.deleteFavorite(tempProduct.get()));
+        productRepository.delete(tempProduct.get());
     }
 
     public Product updateProduct(Integer id, ProductDto product) {
@@ -107,10 +110,10 @@ public class ProductService {
         Optional<Category> tempCategory = categoryRepository.findById(product.getCategoryId());
 
         if (tempProduct.isEmpty()) {
-            throw new EntityNotFoundException();
+            throw new NotFoundException("Product with id " + id + " doesnt exist");
         }
         if (tempCategory.isEmpty()) {
-            throw new EntityNotFoundException();
+            throw new NotFoundException("Category with id " + product.getCategoryId() + " doesnt exist");
         }
         Product updatedProduct = createProductFromDto(product, tempCategory.get());
         return productRepository.save(updatedProduct);

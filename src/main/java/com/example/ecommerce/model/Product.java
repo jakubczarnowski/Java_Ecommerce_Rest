@@ -5,10 +5,13 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "products")
+
 public class Product extends BaseEntity {
     private @NotNull String name;
     @Convert(converter = StringListConverter.class)
@@ -21,6 +24,9 @@ public class Product extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "category_id", nullable = false)
     Category category;
+
+    @ManyToMany(mappedBy="favorite")
+    private Set<User> userFavorite = new HashSet<User>();
 
     public Product(String name, List<String> imagesUrl, String description, Category category, Double price) {
         super();
@@ -86,6 +92,20 @@ public class Product extends BaseEntity {
     public void setPrice(Double price) {
         this.price = price;
     }
+
+    public Set<User> getUserFavorite() {
+        return userFavorite;
+    }
+    public void addFavorite(User user){
+        this.userFavorite.add(user);
+    }
+    public void removeFavorite(User user){
+        this.userFavorite.remove(user);
+    }
+    public void setUserFavorite(Set<User> userFavorite) {
+        this.userFavorite = userFavorite;
+    }
+
 
     @Override
     public String toString() {

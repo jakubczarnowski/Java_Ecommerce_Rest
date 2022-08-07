@@ -1,11 +1,13 @@
 package com.example.ecommerce.config;
 
+import java.time.Instant;
 import java.time.LocalDateTime;
 
 public class ApiResponse {
     private final boolean success;
     private final String message;
 
+    private Instant time;
 
     public ApiResponse(boolean success, String message) {
         this.success = success;
