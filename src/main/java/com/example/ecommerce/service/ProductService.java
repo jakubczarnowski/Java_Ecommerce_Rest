@@ -1,6 +1,8 @@
 package com.example.ecommerce.service;
 
+import com.example.ecommerce.Utils.ProductMapper;
 import com.example.ecommerce.dto.product.ProductDto;
+import com.example.ecommerce.dto.product.ProductEditDto;
 import com.example.ecommerce.dto.product.ProductsGetDto;
 import com.example.ecommerce.exceptions.NotFoundException;
 import com.example.ecommerce.model.Category;
@@ -17,18 +19,18 @@ import java.util.*;
 public class ProductService {
     private final ProductRepository productRepository;
     private final CategoryRepository categoryRepository;
-
+    private final ProductMapper mapper;
     @Autowired
-    public ProductService(ProductRepository productRepository, CategoryRepository categoryRepository) {
+    public ProductService(ProductRepository productRepository, CategoryRepository categoryRepository, ProductMapper mapper) {
         this.productRepository = productRepository;
         this.categoryRepository = categoryRepository;
+        this.mapper = mapper;
     }
 
     public Product createProductFromDto(ProductDto productDto, Category category) {
         Product updatedProduct = new Product();
         updatedProduct.setName(productDto.getName());
         updatedProduct.setDescription(productDto.getDescription());
-        updatedProduct.setImagesUrl(productDto.getImagesUrl());
         updatedProduct.setPrice(productDto.getPrice());
         updatedProduct.setCategory(category);
         return updatedProduct;
@@ -91,12 +93,12 @@ public class ProductService {
         }
 
         Product newProduct = createProductFromDto(product, tempCategory.get());
+        System.out.println("DZIALA?");
         return productRepository.save(newProduct);
     }
 
     // Delete, {id}
     public void removeProductById(Integer id) {
-        System.out.println("tutaj");
         Optional<Product> tempProduct = productRepository.findById(id);
         if (tempProduct.isEmpty()) {
             throw new NotFoundException("Product with id " + id + " doesnt exist");
@@ -105,17 +107,20 @@ public class ProductService {
         productRepository.delete(tempProduct.get());
     }
 
-    public Product updateProduct(Integer id, ProductDto product) {
+    public Product updateProduct(Integer id, ProductEditDto product) {
         Optional<Product> tempProduct = productRepository.findById(id);
-        Optional<Category> tempCategory = categoryRepository.findById(product.getCategoryId());
 
         if (tempProduct.isEmpty()) {
             throw new NotFoundException("Product with id " + id + " doesnt exist");
         }
-        if (tempCategory.isEmpty()) {
-            throw new NotFoundException("Category with id " + product.getCategoryId() + " doesnt exist");
+        mapper.updateProductFromDto(product, tempProduct.get());
+        if(product.getCategoryId() != null){
+            Optional<Category> tempCategory = categoryRepository.findById(product.getCategoryId());
+            if(tempCategory.isEmpty()){
+                throw new NotFoundException("Category with id " + id + " doesnt exist");
+            }
+            tempProduct.get().setCategory(tempCategory.get());
         }
-        Product updatedProduct = createProductFromDto(product, tempCategory.get());
-        return productRepository.save(updatedProduct);
+        return productRepository.save(tempProduct.get());
     }
 }

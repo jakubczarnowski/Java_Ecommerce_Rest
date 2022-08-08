@@ -26,6 +26,7 @@ public class Product extends BaseEntity {
     Category category;
 
     @ManyToMany(mappedBy="favorite")
+    @JsonIgnore
     private Set<User> userFavorite = new HashSet<User>();
 
     public Product(String name, List<String> imagesUrl, String description, Category category, Double price) {

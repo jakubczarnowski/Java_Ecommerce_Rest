@@ -2,6 +2,7 @@ package com.example.ecommerce.controllers;
 
 import com.example.ecommerce.config.ApiResponse;
 import com.example.ecommerce.dto.product.ProductDto;
+import com.example.ecommerce.dto.product.ProductEditDto;
 import com.example.ecommerce.dto.product.ProductsGetDto;
 import com.example.ecommerce.model.Product;
 import com.example.ecommerce.service.ProductService;
@@ -37,7 +38,7 @@ public class ProductController {
     }
 
     @PutMapping("{id}")
-    public ResponseEntity<Product> updateProduct(@PathVariable Integer id, @Valid @RequestBody ProductDto product) {
+    public ResponseEntity<Product> updateProduct(@PathVariable Integer id, @Valid @RequestBody ProductEditDto product) {
         return new ResponseEntity<>(productService.updateProduct(id, product), HttpStatus.OK);
     }
 

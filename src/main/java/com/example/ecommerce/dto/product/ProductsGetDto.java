@@ -12,6 +12,7 @@ public class ProductsGetDto {
     private @NotNull double price;
     private @NotNull String description;
     private @NotNull Integer categoryId;
+    private @NotNull String categoryName;
     private @NotNull Boolean isFavorite;
     // ProductDto from product
     public ProductsGetDto(Product product, Boolean isFavorite) {
@@ -21,10 +22,11 @@ public class ProductsGetDto {
         this.price = product.getPrice();
         this.description = product.getDescription();
         this.categoryId = product.getCategory().getId();
+        this.categoryName = product.getCategory().getCategoryName();
         this.isFavorite = isFavorite;
     }
 
-    public ProductsGetDto(Integer id, String name, List<String> imagesUrl, double price, String description, Integer categoryId, Boolean isFavorite) {
+    public ProductsGetDto(Integer id, String name, List<String> imagesUrl, double price, String description, Integer categoryId,String categoryName, Boolean isFavorite) {
         this.id = id;
         this.name = name;
         this.imagesUrl = imagesUrl;
@@ -32,6 +34,7 @@ public class ProductsGetDto {
         this.description = description;
         this.categoryId = categoryId;
         this.isFavorite = isFavorite;
+        this.categoryName = categoryName;
     }
 
     public String getName() {
@@ -88,5 +91,13 @@ public class ProductsGetDto {
 
     public void setFavorite(Boolean favorite) {
         isFavorite = favorite;
+    }
+
+    public String getCategoryName() {
+        return categoryName;
+    }
+
+    public void setCategoryName(String categoryName) {
+        this.categoryName = categoryName;
     }
 }
