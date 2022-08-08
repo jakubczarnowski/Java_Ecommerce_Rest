@@ -32,6 +32,7 @@ public class ProductService {
         updatedProduct.setName(productDto.getName());
         updatedProduct.setDescription(productDto.getDescription());
         updatedProduct.setPrice(productDto.getPrice());
+        updatedProduct.setImagesUrl(productDto.getImagesUrl());
         updatedProduct.setCategory(category);
         return updatedProduct;
     }
@@ -93,7 +94,6 @@ public class ProductService {
         }
 
         Product newProduct = createProductFromDto(product, tempCategory.get());
-        System.out.println("DZIALA?");
         return productRepository.save(newProduct);
     }
 

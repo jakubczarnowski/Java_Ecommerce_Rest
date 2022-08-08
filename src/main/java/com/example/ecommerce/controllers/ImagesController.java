@@ -27,7 +27,7 @@ public class ImagesController {
             imagesStorageService.save(file, fileName);
             return new ResponseEntity<>(fileName, HttpStatus.CREATED);
         } catch (Exception ex) {
-            System.out.println(ex.toString());
+
             return new ResponseEntity<>("Image is not uploaded", HttpStatus.BAD_REQUEST);
         }
     }
