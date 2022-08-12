@@ -9,6 +9,7 @@ import com.example.ecommerce.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -36,17 +37,17 @@ public class ProductController {
     public ResponseEntity<Product> getProduct(@PathVariable Integer id) {
         return new ResponseEntity<>(productService.getProductById(id), HttpStatus.OK);
     }
-
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PutMapping("{id}")
     public ResponseEntity<Product> updateProduct(@PathVariable Integer id, @Valid @RequestBody ProductEditDto product) {
         return new ResponseEntity<>(productService.updateProduct(id, product), HttpStatus.OK);
     }
-
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PostMapping
     public ResponseEntity<Product> createProduct(@Valid @RequestBody ProductDto product) {
         return new ResponseEntity<>(productService.createProduct(product), HttpStatus.CREATED);
     }
-
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @DeleteMapping("{id}")
     public ResponseEntity<ApiResponse> deleteProduct(@Valid @PathVariable Integer id) {
         productService.removeProductById(id);

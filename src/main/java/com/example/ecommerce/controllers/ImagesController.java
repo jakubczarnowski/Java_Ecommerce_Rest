@@ -5,6 +5,7 @@ import com.example.ecommerce.service.ImagesStorageService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -20,6 +21,7 @@ public class ImagesController {
     }
 
 
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PostMapping(value="upload", produces = {MediaType.IMAGE_PNG_VALUE, "application/json"})
     public ResponseEntity<?> uploadImage(@RequestParam("imageFile") MultipartFile file) {
         String fileName = GenerateImageName.generateImageName() + "." + file.getOriginalFilename().split("\\.")[1];

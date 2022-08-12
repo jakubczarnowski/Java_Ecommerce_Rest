@@ -36,7 +36,6 @@ public class CategoryService {
 
     public void removeCategoryById(int id) {
         if (id == 1) {
-            // Can't remove root category
             throw new NotFoundException("Can't remove root category");
         }
         Optional<Category> tempCategory = categoryRepository.findById(id);
@@ -71,7 +70,6 @@ public class CategoryService {
         Category newCategory = new Category();
         newCategory.setCategoryName(categoryDto.getCategoryName());
         newCategory.setDescription(categoryDto.getDescription());
-        newCategory.setImageUrl(categoryDto.getImageUrl());
         newCategory.setParentCategoryId(categoryDto.getParentId());
         return newCategory;
     }

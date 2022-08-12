@@ -12,7 +12,6 @@ public class Category extends BaseEntity {
     @Column(name = "category_name", unique = true)
     private @NotNull String categoryName;
     private @NotNull String description;
-    private @NotNull String imageUrl;
 
     @OneToMany(
             cascade = CascadeType.ALL,
@@ -26,11 +25,10 @@ public class Category extends BaseEntity {
 
     }
 
-    public Category(@NotBlank String categoryName, @NotBlank String description, @NotBlank String imageUrl, @NotBlank Integer parentCategoryId) {
+    public Category(@NotBlank String categoryName, @NotBlank String description, @NotBlank Integer parentCategoryId) {
         super();
         this.categoryName = categoryName;
         this.description = description;
-        this.imageUrl = imageUrl;
         this.parentCategoryId = parentCategoryId;
     }
 
@@ -61,13 +59,6 @@ public class Category extends BaseEntity {
         this.description = description;
     }
 
-    public String getImageUrl() {
-        return imageUrl;
-    }
-
-    public void setImageUrl(String imageUrl) {
-        this.imageUrl = imageUrl;
-    }
 
     public Integer getId() {
         return id;

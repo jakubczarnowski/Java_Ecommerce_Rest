@@ -6,7 +6,6 @@ import com.example.ecommerce.model.Role;
 import com.example.ecommerce.model.User;
 import com.example.ecommerce.repository.CategoryRepository;
 import com.example.ecommerce.repository.RoleRepository;
-import com.example.ecommerce.repository.UserRepository;
 import com.example.ecommerce.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -33,7 +32,7 @@ public class EcommerceApplication {
     public CommandLineRunner insertRootCategory(@Autowired CategoryRepository repository) {
         return (args) -> {
             try {
-                repository.save(new Category("root", "rootCategory", "", 1));
+                repository.save(new Category("root", "rootCategory", 1));
             } catch (Exception e) {
 
             }

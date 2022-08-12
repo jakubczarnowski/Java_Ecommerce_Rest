@@ -1,12 +1,12 @@
 package com.example.ecommerce.dto.product;
 
+import com.example.ecommerce.model.BaseEntity;
 import com.example.ecommerce.model.Product;
 
 import javax.validation.constraints.NotNull;
 import java.util.List;
 
-public class ProductsGetDto {
-    private @NotNull Integer id;
+public class ProductsGetDto extends BaseEntity {
     private @NotNull String name;
     private @NotNull List<String> imagesUrl;
     private @NotNull double price;
@@ -17,6 +17,8 @@ public class ProductsGetDto {
     // ProductDto from product
     public ProductsGetDto(Product product, Boolean isFavorite) {
         this.id = product.getId();
+        this.createdAt = product.getCreatedAt();
+        this.modifiedAt=  product.getModifiedAt();
         this.name = product.getName();
         this.imagesUrl = product.getImagesUrl();
         this.price = product.getPrice();
@@ -75,14 +77,6 @@ public class ProductsGetDto {
 
     public void setCategoryId(Integer categoryId) {
         this.categoryId = categoryId;
-    }
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
     }
 
     public Boolean getFavorite() {

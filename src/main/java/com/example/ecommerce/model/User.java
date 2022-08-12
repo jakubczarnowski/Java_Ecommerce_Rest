@@ -47,7 +47,6 @@ public class User extends BaseEntity {
             inverseJoinColumns = @JoinColumn(name = "product_id"))
     private Set<Product> favorite = new HashSet<>();
 
-
     public User() {
     }
     public User(String username, String email, String password, String name, String surname) {
@@ -57,6 +56,20 @@ public class User extends BaseEntity {
         this.surname = surname;
         this.password = password;
     }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "username='" + username + '\'' +
+                ", email='" + email + '\'' +
+                ", name='" + name + '\'' +
+                ", surname='" + surname + '\'' +
+                ", password='" + password + '\'' +
+                ", roles=" + roles +
+                ", favorite=" + favorite +
+                '}';
+    }
+
     public String getUsername() {
         return username;
     }

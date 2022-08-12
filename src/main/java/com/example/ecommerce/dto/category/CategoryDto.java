@@ -7,13 +7,11 @@ import javax.validation.constraints.NotNull;
 public class CategoryDto extends BaseEntity {
     private @NotNull String categoryName;
     private @NotNull String description;
-    private @NotNull String imageUrl;
     private Integer parentId = 1; // if not provided, automatically add to a root category
 
-    public CategoryDto(String categoryName, String description, String imageUrl) {
+    public CategoryDto(String categoryName, String description) {
         this.categoryName = categoryName;
         this.description = description;
-        this.imageUrl = imageUrl;
     }
 
     public CategoryDto() {
@@ -22,7 +20,6 @@ public class CategoryDto extends BaseEntity {
     public CategoryDto(String categoryName, String description, String imageUrl, Integer parentId) {
         this.categoryName = categoryName;
         this.description = description;
-        this.imageUrl = imageUrl;
         this.parentId = parentId;
     }
 
@@ -42,13 +39,6 @@ public class CategoryDto extends BaseEntity {
         this.description = description;
     }
 
-    public String getImageUrl() {
-        return imageUrl;
-    }
-
-    public void setImageUrl(String imageUrl) {
-        this.imageUrl = imageUrl;
-    }
 
     public Integer getParentId() {
         return parentId;
