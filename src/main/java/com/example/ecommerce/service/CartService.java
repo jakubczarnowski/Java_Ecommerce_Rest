@@ -23,7 +23,7 @@ public class CartService {
     UserRepository userRepository;
     ProductRepository productRepository;
 
-    public void addToCart(AddToCartDto addToCartDto, String username){
+    public CartItemDto addToCart(AddToCartDto addToCartDto, String username){
         Optional<User> user = userRepository.findByUsername(username);
         Optional<Product> product = productRepository.findById(addToCartDto.getProductId());
         if(product.isEmpty()){
@@ -34,6 +34,7 @@ public class CartService {
         }
         Cart cart = new Cart(product.get(), user.get(), addToCartDto.getQuantity());
         cartRepository.save(cart);
+        return new CartItemDto(cart);
     }
 
     @Autowired
@@ -62,6 +63,7 @@ public class CartService {
         }
         if(cartDto.getQuantity() == 0){
             cartRepository.delete(cart.get());
+            return;
         }
         cart.get().setQuantity(cartDto.getQuantity());
         cartRepository.save(cart.get());

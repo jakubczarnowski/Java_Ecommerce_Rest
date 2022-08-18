@@ -34,6 +34,7 @@ public class ProductService {
         updatedProduct.setPrice(productDto.getPrice());
         updatedProduct.setImagesUrl(productDto.getImagesUrl());
         updatedProduct.setCategory(category);
+        updatedProduct.generateSlug(productDto.getName());
         return updatedProduct;
     }
 

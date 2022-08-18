@@ -1,13 +1,14 @@
 package com.example.ecommerce.model;
 
+import com.example.ecommerce.Utils.GenerateRandomString;
 import com.example.ecommerce.model.converter.StringListConverter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.text.Normalizer;
+import java.util.*;
+import java.util.regex.Pattern;
 
 @Entity
 @Table(name = "products")
@@ -19,6 +20,7 @@ public class Product extends BaseEntity {
     private @NotNull String description;
     private @NotNull Double price;
 
+    private @NotNull String slug;
 
     @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
@@ -36,6 +38,7 @@ public class Product extends BaseEntity {
         this.description = description;
         this.category = category;
         this.price = price;
+        this.generateSlug(name);
     }
 
     public Product() {
@@ -107,6 +110,22 @@ public class Product extends BaseEntity {
         this.userFavorite = userFavorite;
     }
 
+    public String getSlug() {
+        return slug;
+    }
+
+    public void setSlug(String slug) {
+        this.slug = slug;
+    }
+
+    public void generateSlug(String name){
+        Pattern NONLATIN = Pattern.compile("[^\\w-]");
+        Pattern WHITESPACE = Pattern.compile("[\\s]");
+        String nowhitespace = WHITESPACE.matcher(name).replaceAll("-");
+        String normalized = Normalizer.normalize(nowhitespace, Normalizer.Form.NFD);
+        String slug = NONLATIN.matcher(normalized).replaceAll("") + "-" + GenerateRandomString.generateRandomString(6);
+        setSlug(slug.toLowerCase(Locale.ENGLISH));
+    }
 
     @Override
     public String toString() {
