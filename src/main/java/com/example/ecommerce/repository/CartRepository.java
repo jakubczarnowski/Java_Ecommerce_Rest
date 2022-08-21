@@ -12,4 +12,5 @@ import java.util.List;
 public interface CartRepository extends JpaRepository<Cart, Integer> {
     List<Cart> findAllByUser(User user);
     Boolean existsByProductAndUser(Product product, User user);
+    void deleteAllByProduct(Product product);
 }

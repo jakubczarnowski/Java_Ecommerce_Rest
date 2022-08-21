@@ -5,8 +5,10 @@ import com.example.ecommerce.dto.product.ProductDto;
 import com.example.ecommerce.dto.product.ProductEditDto;
 import com.example.ecommerce.dto.product.ProductsGetDto;
 import com.example.ecommerce.exceptions.NotFoundException;
+import com.example.ecommerce.model.Cart;
 import com.example.ecommerce.model.Category;
 import com.example.ecommerce.model.Product;
+import com.example.ecommerce.repository.CartRepository;
 import com.example.ecommerce.repository.CategoryRepository;
 import com.example.ecommerce.repository.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,11 +21,13 @@ import java.util.*;
 public class ProductService {
     private final ProductRepository productRepository;
     private final CategoryRepository categoryRepository;
+    private final CartRepository cartRepository;
     private final ProductMapper mapper;
     @Autowired
-    public ProductService(ProductRepository productRepository, CategoryRepository categoryRepository, ProductMapper mapper) {
+    public ProductService(ProductRepository productRepository, CategoryRepository categoryRepository, CartRepository cartRepository, ProductMapper mapper) {
         this.productRepository = productRepository;
         this.categoryRepository = categoryRepository;
+        this.cartRepository = cartRepository;
         this.mapper = mapper;
     }
 
@@ -104,6 +108,7 @@ public class ProductService {
         if (tempProduct.isEmpty()) {
             throw new NotFoundException("Product with id " + id + " doesnt exist");
         }
+        cartRepository.deleteAllByProduct(tempProduct.get());
         tempProduct.get().getUserFavorite().forEach(user->user.deleteFavorite(tempProduct.get()));
         productRepository.delete(tempProduct.get());
     }
