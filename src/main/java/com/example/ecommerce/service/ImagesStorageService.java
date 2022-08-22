@@ -11,7 +11,7 @@ import java.util.List;
 
 @Service
 public class ImagesStorageService {
-    String resourcePath = "C:\\EcommercePictures\\";
+    String resourcePath = "C:\\EcommercePictures\\"; // TODO change for macos, currently saving in root path
     public void save(MultipartFile file, String imageName) throws IOException {
         // Files storage in a local directory
         Files.createDirectories(Paths.get(resourcePath));
