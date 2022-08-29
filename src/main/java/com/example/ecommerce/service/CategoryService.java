@@ -1,6 +1,8 @@
 package com.example.ecommerce.service;
 
+import com.example.ecommerce.Utils.CategoryMapper;
 import com.example.ecommerce.dto.category.CategoryDto;
+import com.example.ecommerce.dto.category.CategoryEditDto;
 import com.example.ecommerce.exceptions.NotFoundException;
 import com.example.ecommerce.model.Category;
 import com.example.ecommerce.repository.CategoryRepository;
@@ -12,7 +14,7 @@ import java.util.Optional;
 @Service
 public class CategoryService {
     CategoryRepository categoryRepository;
-
+    CategoryMapper mapper;
     public boolean categoryWithNameExists(String categoryName) {
         Optional<Category> tempCategory = categoryRepository.findByCategoryName(categoryName);
         // do zmiany na wlasne
@@ -20,9 +22,10 @@ public class CategoryService {
     }
 
     @Autowired
-    public CategoryService(CategoryRepository categoryRepository) {
+    public CategoryService(CategoryRepository categoryRepository, CategoryMapper mapper) {
         super();
         this.categoryRepository = categoryRepository;
+        this.mapper = mapper;
     }
 
     public Category createCategory(CategoryDto category) {
@@ -56,16 +59,15 @@ public class CategoryService {
         return tempCategory.get();
     }
 
-    public Category updateCategory(Integer id, CategoryDto category) {
+    public Category updateCategory(Integer id, CategoryEditDto category) {
         Optional<Category> tempCategory = categoryRepository.findById(id);
         if (tempCategory.isEmpty()) {
             throw new NotFoundException("Category with id " + id + " doesnt exist");
         }
-        Category newCategory = createCategoryFromDto(category);
-        newCategory.setId(id);
-        return categoryRepository.save(newCategory);
+        mapper.updateProductFromDto(category, tempCategory.get());
+        System.out.println(tempCategory.get().toString());
+        return categoryRepository.save(tempCategory.get());
     }
-
     private Category createCategoryFromDto(CategoryDto categoryDto) {
         Category newCategory = new Category();
         newCategory.setCategoryName(categoryDto.getCategoryName());

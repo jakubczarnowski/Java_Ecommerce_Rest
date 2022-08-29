@@ -35,6 +35,9 @@ public class User extends BaseEntity {
     @NotBlank
     @Size(max = 120)
     private String password;
+
+
+
     @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.DETACH)
     @JoinTable(	name = "user_roles",
             joinColumns = @JoinColumn(name = "user_id"),
@@ -46,6 +49,9 @@ public class User extends BaseEntity {
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "product_id"))
     private Set<Product> favorite = new HashSet<>();
+
+    @OneToMany(cascade = CascadeType.REMOVE, orphanRemoval = true)
+    private Set<DeliveryAddress> addresses = new HashSet<>();
 
     public User() {
     }
@@ -126,5 +132,20 @@ public class User extends BaseEntity {
         this.favorite.remove(product);
         product.removeFavorite(this);
 
+    }
+
+    public Set<DeliveryAddress> getAddresses() {
+        return addresses;
+    }
+
+    public void setAddresses(Set<DeliveryAddress> addresses) {
+        this.addresses = addresses;
+    }
+    public void addAdress(DeliveryAddress address){
+        this.addresses.add(address);
+    }
+
+    public void deleteAdress(DeliveryAddress address){
+        this.addresses.remove(address);
     }
 }

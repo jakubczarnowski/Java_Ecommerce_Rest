@@ -2,6 +2,7 @@ package com.example.ecommerce.controllers;
 
 import com.example.ecommerce.config.ApiResponse;
 import com.example.ecommerce.dto.category.CategoryDto;
+import com.example.ecommerce.dto.category.CategoryEditDto;
 import com.example.ecommerce.model.Category;
 import com.example.ecommerce.service.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,8 +39,8 @@ public class CategoryController {
     }
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    @PutMapping("{id}")
-    public ResponseEntity<Category> updateCategory(@PathVariable Integer id, @Valid @RequestBody CategoryDto category) {
+    @PatchMapping("{id}")
+    public ResponseEntity<Category> updateCategory(@PathVariable Integer id, @Valid @RequestBody CategoryEditDto category) {
         return new ResponseEntity<>(categoryService.updateCategory(id, category), HttpStatus.OK);
     }
 
