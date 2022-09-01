@@ -15,7 +15,7 @@ public class Order extends BaseEntity{
     @OneToMany
     private @NotNull Set<Cart> cartItems;
     private @NotNull Double totalCost;
-    private @NotNull EPaymentStatus paymentStatus;
+    private @NotNull EPaymentStatus paymentStatus = EPaymentStatus.PROCESSING;
     @ManyToOne
     @JoinColumn(name="delivery_id")
     private @NotNull DeliveryAddress deliveryAddress;
@@ -71,5 +71,13 @@ public class Order extends BaseEntity{
 
     public void setDeliveryAddress(DeliveryAddress deliveryAddress) {
         this.deliveryAddress = deliveryAddress;
+    }
+
+    public String getMoreInfo() {
+        return moreInfo;
+    }
+
+    public void setMoreInfo(String moreInfo) {
+        this.moreInfo = moreInfo;
     }
 }

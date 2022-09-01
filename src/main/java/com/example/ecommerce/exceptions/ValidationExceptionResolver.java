@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import javax.validation.ConstraintViolationException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -23,5 +24,16 @@ public class ValidationExceptionResolver {
             errors.put(fieldName, errorMessage);
         });
         return errors;
+    }
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(ConstraintViolationException.class)
+    public String handleValidationException(
+            ConstraintViolationException ex) {
+        StringBuilder str = new StringBuilder("");
+        ex.getConstraintViolations().forEach(val->{
+            str.append(val.getPropertyPath()).append(":");
+            str.append(val.getMessage()).append(";\n");
+        });
+        return str.toString();
     }
 }

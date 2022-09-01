@@ -19,7 +19,6 @@ public class Product extends BaseEntity {
     private @NotNull List<String> imagesUrl;
     private @NotNull String description;
     private @NotNull Double price;
-
     private @NotNull String slug;
 
     @JsonIgnore
