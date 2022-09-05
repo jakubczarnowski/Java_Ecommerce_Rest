@@ -46,7 +46,9 @@ public class UserService {
         user.setRoles(roles);
         userRepository.save(user);
     }
+
     public void createUser(User user) {
+        System.out.println("XD");
         if (userRepository.existsByUsername(user.getUsername())) {
             throw new RuntimeException("Username already taken");
         }
@@ -59,32 +61,36 @@ public class UserService {
         Optional<Role> userRole = roleRepository.findByName(ERole.ROLE_USER);
         user.getRoles().add(userRole.get());
         userRepository.save(user);
+        System.out.println("omaga");
     }
-    public Set<ProductsGetDto> getFavorite(String username){
-        User user =  userRepository.findByUsername(username).get(); // if authenticated, you can assume the user exists
+
+    public Set<ProductsGetDto> getFavorite(String username) {
+        User user = userRepository.findByUsername(username).get(); // if authenticated, you can assume the user exists
         Set<ProductsGetDto> values = new HashSet<>();
         user.getFavorite().forEach(product -> values.add(new ProductsGetDto(product, true)));
         return values;
     }
-    public void addFavorite(String username, Integer product_id){
+
+    public void addFavorite(String username, Integer product_id) {
         User user = userRepository.findByUsername(username).get();
         Optional<Product> product = productRepository.findById(product_id);
-        if(product.isEmpty()){
+        if (product.isEmpty()) {
             throw new NotFoundException("Product with id " + product_id + " doesnt exist");
         }
         user.addFavorite(product.get());
         userRepository.save(user);
     }
 
-    public void deleteFavorite(String username, Integer product_id){
+    public void deleteFavorite(String username, Integer product_id) {
         User user = userRepository.findByUsername(username).get();
         Optional<Product> product = productRepository.findById(product_id);
-        if(product.isEmpty()){
+        if (product.isEmpty()) {
             throw new NotFoundException("Product with id " + product_id + " doesnt exist");
         }
         user.deleteFavorite(product.get());
         userRepository.save(user);
     }
+
     @Autowired
     public UserService(UserRepository userRepository, ProductRepository productRepository, PasswordEncoder encoder, RoleRepository roleRepository) {
         this.userRepository = userRepository;

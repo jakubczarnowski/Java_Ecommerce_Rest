@@ -5,19 +5,23 @@ import javax.validation.constraints.NotNull;
 import java.util.Set;
 
 @Entity
-@Table(name="orders")
-public class Order extends BaseEntity{
+@Table(name = "orders")
+public class Order extends BaseEntity {
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "user_id", nullable = false)
     private @NotNull User user;
 
-    @OneToMany
+    @ManyToMany
+    @JoinTable(
+            name = "order_items",
+            joinColumns = @JoinColumn(name = "order_id"),
+            inverseJoinColumns = @JoinColumn(name = "cart_item_id"))
     private @NotNull Set<Cart> cartItems;
     private @NotNull Double totalCost;
     private @NotNull EPaymentStatus paymentStatus = EPaymentStatus.PROCESSING;
     @ManyToOne
-    @JoinColumn(name="delivery_id")
+    @JoinColumn(name = "delivery_id")
     private @NotNull DeliveryAddress deliveryAddress;
     private String moreInfo;
     private Boolean active = true;

@@ -45,6 +45,7 @@ public class OrderService {
         List<Cart> cartItems = cartRepository.findAllByUser(user);
         Order order = new Order(user, Set.copyOf(cartItems), Utilities.calculateTotalCartCost(cartItems), EPaymentStatus.PROCESSING, deliveryAddress.get(), orderCreateDto.getMoreInfo());
         orderRepository.save(order);
+        cartRepository.deleteAllByUser(user);
         return new OrderGetDto(order);
     }
 

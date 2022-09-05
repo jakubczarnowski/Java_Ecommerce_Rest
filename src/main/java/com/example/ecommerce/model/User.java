@@ -1,7 +1,5 @@
 package com.example.ecommerce.model;
 
-import org.hibernate.annotations.SQLDelete;
-
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
@@ -14,10 +12,9 @@ import java.util.Set;
         @UniqueConstraint(columnNames = "username"),
         @UniqueConstraint(columnNames = "email")
 })
-@SQLDelete(sql = "UPDATE users SET deleted = true WHERE id=?")
 public class User extends BaseEntity {
     @NotBlank
-    @Size(min=3,max = 20)
+    @Size(min = 3, max = 20)
     private String username;
     @NotBlank
     @Size(max = 50)
@@ -37,15 +34,14 @@ public class User extends BaseEntity {
     private String password;
 
 
-
     @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.DETACH)
-    @JoinTable(	name = "user_roles",
+    @JoinTable(name = "user_roles",
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<Role> roles = new HashSet<>();
 
     @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.DETACH, CascadeType.REFRESH})
-    @JoinTable(	name = "user_favorite",
+    @JoinTable(name = "user_favorite",
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "product_id"))
     private Set<Product> favorite = new HashSet<>();
@@ -55,6 +51,7 @@ public class User extends BaseEntity {
 
     public User() {
     }
+
     public User(String username, String email, String password, String name, String surname) {
         this.username = username;
         this.email = email;
@@ -79,27 +76,35 @@ public class User extends BaseEntity {
     public String getUsername() {
         return username;
     }
+
     public void setUsername(String username) {
         this.username = username;
     }
+
     public String getEmail() {
         return email;
     }
+
     public void setEmail(String email) {
         this.email = email;
     }
+
     public String getPassword() {
         return password;
     }
+
     public void setPassword(String password) {
         this.password = password;
     }
+
     public Set<Role> getRoles() {
         return roles;
     }
+
     public void setRoles(Set<Role> roles) {
         this.roles = roles;
     }
+
     public String getName() {
         return name;
     }
@@ -123,12 +128,13 @@ public class User extends BaseEntity {
     public void setFavorite(Set<Product> favorite) {
         this.favorite = favorite;
     }
-    public void addFavorite(Product product){
+
+    public void addFavorite(Product product) {
         this.favorite.add(product);
         product.addFavorite(this);
     }
 
-    public void deleteFavorite(Product product){
+    public void deleteFavorite(Product product) {
         this.favorite.remove(product);
         product.removeFavorite(this);
 
@@ -141,11 +147,12 @@ public class User extends BaseEntity {
     public void setAddresses(Set<DeliveryAddress> addresses) {
         this.addresses = addresses;
     }
-    public void addAdress(DeliveryAddress address){
+
+    public void addAdress(DeliveryAddress address) {
         this.addresses.add(address);
     }
 
-    public void deleteAdress(DeliveryAddress address){
+    public void deleteAdress(DeliveryAddress address) {
         this.addresses.remove(address);
     }
 }

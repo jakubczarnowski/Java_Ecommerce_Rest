@@ -23,6 +23,7 @@ public class EcommerceApplication {
     String password;
     @Value("${ecommerce.app.adminEmail}")
     String email;
+
     public static void main(String[] args) {
         ApplicationContext appContext = SpringApplication.run(EcommerceApplication.class, args);
     }
@@ -34,7 +35,7 @@ public class EcommerceApplication {
             try {
                 repository.save(new Category("root", "rootCategory", 1));
             } catch (Exception e) {
-
+                System.out.println(e.getMessage());
             }
         };
     }
@@ -47,10 +48,11 @@ public class EcommerceApplication {
                 repository.save(new Role(ERole.ROLE_USER));
                 repository.save(new Role(ERole.ROLE_ADMIN));
             } catch (Exception e) {
-
+                System.out.println(e.getMessage());
             }
         };
     }
+
     // Add admin
     @Bean
     public CommandLineRunner insertAdminAccount(@Autowired RoleRepository roleRepository, UserService service) {
@@ -60,6 +62,7 @@ public class EcommerceApplication {
                 user.getRoles().add(roleRepository.findByName(ERole.ROLE_ADMIN).get());
                 service.createUser(user);
             } catch (Exception e) {
+                System.out.println(e.getMessage());
 
             }
         };
