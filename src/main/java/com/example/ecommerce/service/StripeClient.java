@@ -13,7 +13,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
-import java.util.Optional;
+
 @Component
 public class StripeClient {
     @Autowired
@@ -28,8 +28,8 @@ public class StripeClient {
 
     public String chargeNewCard(String username) throws Exception {
         Stripe.apiKey = API_SECRET_KEY;
-        Optional<User> user = userRepository.findByUsername(username);
-        List<Cart> cartItems = cartRepository.findAllByUser(user.get());
+        User user = userRepository.findByUsername(username).get();
+        List<Cart> cartItems = cartRepository.findAllByUser(user);
         Double amount = Utilities.calculateTotalCartCost(cartItems);
         PaymentIntentCreateParams params =
                 PaymentIntentCreateParams.builder()

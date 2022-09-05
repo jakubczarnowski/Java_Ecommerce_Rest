@@ -1,45 +1,38 @@
-package com.example.ecommerce.model;
+package com.example.ecommerce.dto.order;
 
-import javax.persistence.*;
-import javax.validation.constraints.NotNull;
+import com.example.ecommerce.model.Cart;
+import com.example.ecommerce.model.DeliveryAddress;
+import com.example.ecommerce.model.EPaymentStatus;
+import com.example.ecommerce.model.Order;
+
 import java.util.Set;
 
-@Entity
-@Table(name="orders")
-public class Order extends BaseEntity{
-
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "user_id", nullable = false)
-    private @NotNull User user;
-
-    @OneToMany
-    private @NotNull Set<Cart> cartItems;
-    private @NotNull Double totalCost;
-    private @NotNull EPaymentStatus paymentStatus = EPaymentStatus.PROCESSING;
-    @ManyToOne
-    @JoinColumn(name="delivery_id")
-    private @NotNull DeliveryAddress deliveryAddress;
+public class OrderGetDto {
+    private Set<Cart> cartItems;
+    private Double totalCost;
+    private EPaymentStatus paymentStatus;
+    private DeliveryAddress deliveryAddress;
     private String moreInfo;
-    private Boolean active = true;
+    private Boolean active;
 
-    public Order() {
+    public OrderGetDto() {
     }
 
-    public Order(User user, Set<Cart> cartItems, Double totalCost, EPaymentStatus paymentStatus, DeliveryAddress deliveryAddress, String moreInfo) {
-        this.user = user;
+    public OrderGetDto(Set<Cart> cartItems, Double totalCost, EPaymentStatus paymentStatus, DeliveryAddress deliveryAddress, String moreInfo, Boolean active) {
         this.cartItems = cartItems;
         this.totalCost = totalCost;
         this.paymentStatus = paymentStatus;
         this.deliveryAddress = deliveryAddress;
         this.moreInfo = moreInfo;
+        this.active = active;
     }
 
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
+    public OrderGetDto(Order order) {
+        this.cartItems = order.getCartItems();
+        this.totalCost = order.getTotalCost();
+        this.paymentStatus = order.getPaymentStatus();
+        this.deliveryAddress = order.getDeliveryAddress();
+        this.active = order.getActive();
     }
 
     public Set<Cart> getCartItems() {
@@ -78,15 +71,15 @@ public class Order extends BaseEntity{
         return moreInfo;
     }
 
+    public void setMoreInfo(String moreInfo) {
+        this.moreInfo = moreInfo;
+    }
+
     public Boolean getActive() {
         return active;
     }
 
     public void setActive(Boolean active) {
         this.active = active;
-    }
-
-    public void setMoreInfo(String moreInfo) {
-        this.moreInfo = moreInfo;
     }
 }
