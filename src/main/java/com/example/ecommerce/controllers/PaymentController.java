@@ -4,6 +4,8 @@ import com.example.ecommerce.service.StripeClient;
 import com.stripe.model.Charge;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
@@ -22,10 +24,10 @@ public class PaymentController {
     }
 
     @PostMapping("/charge")
-    public Charge chargeCard(@RequestHeader(value="token") String token, @RequestHeader(value="amount") Double amount) throws Exception {
-        System.out.println(token);
-        System.out.println(amount);
-        return this.stripeClient.chargeNewCard(token, amount);
+    public String chargeCard() throws Exception {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String username = authentication.getName();
+        return this.stripeClient.chargeNewCard(username);
 
     }
 }
