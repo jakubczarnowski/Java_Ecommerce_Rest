@@ -29,7 +29,7 @@ public class StripeClient {
     public String chargeNewCard(String username) throws Exception {
         Stripe.apiKey = API_SECRET_KEY;
         User user = userRepository.findByUsername(username).get();
-        List<Cart> cartItems = cartRepository.findAllByUser(user);
+        List<Cart> cartItems = cartRepository.findAllByUserId(user.getId());
         Double amount = Utilities.calculateTotalCartCost(cartItems);
         PaymentIntentCreateParams params =
                 PaymentIntentCreateParams.builder()

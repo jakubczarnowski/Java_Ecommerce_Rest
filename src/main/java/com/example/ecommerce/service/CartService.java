@@ -23,13 +23,13 @@ public class CartService {
     UserRepository userRepository;
     ProductRepository productRepository;
 
-    public CartItemDto addToCart(AddToCartDto addToCartDto, String username){
+    public CartItemDto addToCart(AddToCartDto addToCartDto, String username) {
         Optional<User> user = userRepository.findByUsername(username);
         Optional<Product> product = productRepository.findById(addToCartDto.getProductId());
-        if(product.isEmpty()){
+        if (product.isEmpty()) {
             throw new NotFoundException("Product with id " + addToCartDto.getProductId() + " doesn't exist");
         }
-        if(cartRepository.existsByProductAndUser(product.get(), user.get())){
+        if (cartRepository.existsByProductAndUserAndActiveTrue(product.get(), user.get())) {
             throw new AlreadyInCartError("Product already in cart. Change the quantity");
         }
         Cart cart = new Cart(product.get(), user.get(), addToCartDto.getQuantity());
@@ -38,7 +38,7 @@ public class CartService {
     }
 
     @Autowired
-    public CartService(CartRepository cartRepository, UserRepository userRepository,ProductRepository productRepository) {
+    public CartService(CartRepository cartRepository, UserRepository userRepository, ProductRepository productRepository) {
         this.cartRepository = cartRepository;
         this.userRepository = userRepository;
         this.productRepository = productRepository;
@@ -46,10 +46,10 @@ public class CartService {
 
     public CartGetDto getCartItems(String username) {
         Optional<User> user = userRepository.findByUsername(username);
-        List<Cart> cartItems = cartRepository.findAllByUser(user.get());
+        List<Cart> cartItems = cartRepository.findAllByUserId(user.get().getId());
         CartGetDto cart = new CartGetDto();
-        for (Cart item:
-             cartItems) {
+        for (Cart item :
+                cartItems) {
             cart.addCartItem(new CartItemDto(item));
         }
         cart.calculateTotalCost();
@@ -58,10 +58,10 @@ public class CartService {
 
     public void changeQuantity(AddToCartDto cartDto) {
         Optional<Cart> cart = cartRepository.findById(cartDto.getId());
-        if(cart.isEmpty()){
+        if (cart.isEmpty()) {
             throw new NotFoundException("Cart with id " + cartDto.getId() + " not found");
         }
-        if(cartDto.getQuantity() == 0){
+        if (cartDto.getQuantity() == 0) {
             cartRepository.delete(cart.get());
             return;
         }

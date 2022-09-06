@@ -42,10 +42,10 @@ public class OrderService {
         if (!user.getAddresses().contains(deliveryAddress.get())) {
             throw new UserNotValidException("Address doesnt belong to the user");
         }
-        List<Cart> cartItems = cartRepository.findAllByUser(user);
+        List<Cart> cartItems = cartRepository.findAllByUserId(user.getId());
         Order order = new Order(user, Set.copyOf(cartItems), Utilities.calculateTotalCartCost(cartItems), EPaymentStatus.PROCESSING, deliveryAddress.get(), orderCreateDto.getMoreInfo());
         orderRepository.save(order);
-        cartRepository.deleteAllByUser(user);
+        cartRepository.deleteAllByUserId(user.getId());
         return new OrderGetDto(order);
     }
 

@@ -3,17 +3,18 @@ package com.example.ecommerce.model;
 import javax.persistence.*;
 
 @Entity
-@Table(name="cart")
-public class Cart extends BaseEntity{
+@Table(name = "cart")
+public class Cart extends BaseEntity {
     @ManyToOne
-    @JoinColumn(name="product_id")
+    @JoinColumn(name = "product_id")
     private Product product;
 
     @ManyToOne(targetEntity = User.class, fetch = FetchType.EAGER)
-    @JoinColumn(name="user_id", nullable = false)
+    @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
     private int quantity;
+    private Boolean active = true;
 
     public Cart() {
     }
@@ -46,5 +47,13 @@ public class Cart extends BaseEntity{
 
     public void setQuantity(int quantity) {
         this.quantity = quantity;
+    }
+
+    public Boolean getActive() {
+        return active;
+    }
+
+    public void setActive(Boolean active) {
+        this.active = active;
     }
 }
