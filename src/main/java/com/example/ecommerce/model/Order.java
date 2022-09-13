@@ -12,7 +12,7 @@ public class Order extends BaseEntity {
     @JoinColumn(name = "user_id", nullable = false)
     private @NotNull User user;
 
-    @ManyToMany
+    @ManyToMany()
     @JoinTable(
             name = "order_items",
             joinColumns = @JoinColumn(name = "order_id"),

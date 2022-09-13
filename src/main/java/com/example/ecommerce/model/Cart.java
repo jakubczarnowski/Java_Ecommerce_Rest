@@ -1,11 +1,14 @@
 package com.example.ecommerce.model;
 
+import org.hibernate.annotations.Where;
+
 import javax.persistence.*;
 
 @Entity
 @Table(name = "cart")
+@Where(clause = "active = 1")
 public class Cart extends BaseEntity {
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "product_id")
     private Product product;
 

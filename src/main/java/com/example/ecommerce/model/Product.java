@@ -3,16 +3,22 @@ package com.example.ecommerce.model;
 import com.example.ecommerce.Utils.GenerateRandomString;
 import com.example.ecommerce.model.converter.StringListConverter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.text.Normalizer;
-import java.util.*;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Locale;
+import java.util.Set;
 import java.util.regex.Pattern;
 
 @Entity
 @Table(name = "products")
-
+@SQLDelete(sql = "UPDATE products SET active = false WHERE id = ?")
+@Where(clause = "active = 1")
 public class Product extends BaseEntity {
     private @NotNull String name;
     @Convert(converter = StringListConverter.class)
@@ -29,6 +35,8 @@ public class Product extends BaseEntity {
     @ManyToMany(mappedBy="favorite")
     @JsonIgnore
     private Set<User> userFavorite = new HashSet<User>();
+
+    private Boolean active = true;
 
     public Product(String name, List<String> imagesUrl, String description, Category category, Double price) {
         super();

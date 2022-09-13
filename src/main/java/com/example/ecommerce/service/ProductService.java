@@ -5,7 +5,6 @@ import com.example.ecommerce.dto.product.ProductDto;
 import com.example.ecommerce.dto.product.ProductEditDto;
 import com.example.ecommerce.dto.product.ProductsGetDto;
 import com.example.ecommerce.exceptions.NotFoundException;
-import com.example.ecommerce.model.Cart;
 import com.example.ecommerce.model.Category;
 import com.example.ecommerce.model.Product;
 import com.example.ecommerce.repository.CartRepository;
@@ -110,7 +109,7 @@ public class ProductService {
         }
         cartRepository.deleteAllByProduct(tempProduct.get());
         tempProduct.get().getUserFavorite().forEach(user->user.deleteFavorite(tempProduct.get()));
-        productRepository.delete(tempProduct.get());
+        productRepository.deleteById(id);
     }
 
     public Product updateProduct(Integer id, ProductEditDto product) {
