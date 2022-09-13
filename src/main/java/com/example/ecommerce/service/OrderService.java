@@ -57,6 +57,7 @@ public class OrderService {
                 orderSet) {
             orderGetDtos.add(new OrderGetDto(order));
         }
+
         return orderGetDtos;
     }
 
