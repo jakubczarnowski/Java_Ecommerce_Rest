@@ -14,6 +14,8 @@ public class ProductsGetDto extends BaseEntity {
     private @NotNull Integer categoryId;
     private @NotNull String categoryName;
     private @NotNull Boolean isFavorite;
+
+    private @NotNull String slug;
     // ProductDto from product
     public ProductsGetDto(Product product, Boolean isFavorite) {
         this.id = product.getId();
@@ -26,6 +28,7 @@ public class ProductsGetDto extends BaseEntity {
         this.categoryId = product.getCategory().getId();
         this.categoryName = product.getCategory().getCategoryName();
         this.isFavorite = isFavorite;
+        this.slug = product.getSlug();
     }
 
     public ProductsGetDto(Integer id, String name, List<String> imagesUrl, double price, String description, Integer categoryId,String categoryName, Boolean isFavorite) {
@@ -93,5 +96,13 @@ public class ProductsGetDto extends BaseEntity {
 
     public void setCategoryName(String categoryName) {
         this.categoryName = categoryName;
+    }
+
+    public String getSlug() {
+        return slug;
+    }
+
+    public void setSlug(String slug) {
+        this.slug = slug;
     }
 }

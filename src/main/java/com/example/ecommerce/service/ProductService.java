@@ -43,11 +43,11 @@ public class ProductService {
 
     // Get, {id}
     public Product getProductById(Integer id) {
-        Optional<Product> tempCategory = productRepository.findById(id);
-        if (tempCategory.isEmpty()) {
+        Optional<Product> tempProduct = productRepository.findById(id);
+        if (tempProduct.isEmpty()) {
             throw new NotFoundException("Product with id " + id + " doesnt exist");
         }
-        return tempCategory.get();
+        return tempProduct.get();
     }
 
     // Get all
@@ -91,13 +91,13 @@ public class ProductService {
 
     // Post, creating product
     public Product createProduct(ProductDto product) {
-        Optional<Category> tempCategory = categoryRepository.findById(product.getCategoryId());
+        Optional<Category> tempProduct = categoryRepository.findById(product.getCategoryId());
 
-        if (tempCategory.isEmpty()) {
+        if (tempProduct.isEmpty()) {
             throw new NotFoundException("Category with id " + product.getCategoryId() + " doesnt exist");
         }
 
-        Product newProduct = createProductFromDto(product, tempCategory.get());
+        Product newProduct = createProductFromDto(product, tempProduct.get());
         return productRepository.save(newProduct);
     }
 
@@ -127,5 +127,14 @@ public class ProductService {
             tempProduct.get().setCategory(tempCategory.get());
         }
         return productRepository.save(tempProduct.get());
+    }
+
+    public Product getProductBySlug(String slug) {
+        Optional<Product> tempProduct = productRepository.findBySlug(slug);
+        if (tempProduct.isEmpty()) {
+            throw new NotFoundException("Product with slug " + slug + " doesnt exist");
+        }
+        return tempProduct.get();
+
     }
 }
