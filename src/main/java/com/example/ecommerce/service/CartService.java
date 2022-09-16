@@ -3,6 +3,7 @@ package com.example.ecommerce.service;
 import com.example.ecommerce.dto.cart.AddToCartDto;
 import com.example.ecommerce.dto.cart.CartGetDto;
 import com.example.ecommerce.dto.cart.CartItemDto;
+import com.example.ecommerce.dto.cart.ChangeQuantityDto;
 import com.example.ecommerce.exceptions.AlreadyInCartError;
 import com.example.ecommerce.exceptions.NotFoundException;
 import com.example.ecommerce.model.Cart;
@@ -56,7 +57,7 @@ public class CartService {
         return cart;
     }
 
-    public void changeQuantity(AddToCartDto cartDto) {
+    public void changeQuantity(ChangeQuantityDto cartDto) {
         Optional<Cart> cart = cartRepository.findById(cartDto.getId());
         if (cart.isEmpty()) {
             throw new NotFoundException("Cart with id " + cartDto.getId() + " not found");

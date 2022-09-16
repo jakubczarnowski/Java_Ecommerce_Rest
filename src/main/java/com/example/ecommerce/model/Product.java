@@ -27,24 +27,27 @@ public class Product extends BaseEntity {
     private @NotNull Double price;
     private @NotNull String slug;
 
+    @OneToMany()
+    private List<Review> reviews;
     @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "category_id", nullable = false)
     Category category;
 
-    @ManyToMany(mappedBy="favorite")
+    @ManyToMany(mappedBy = "favorite")
     @JsonIgnore
     private Set<User> userFavorite = new HashSet<User>();
 
     private Boolean active = true;
 
-    public Product(String name, List<String> imagesUrl, String description, Category category, Double price) {
+    public Product(String name, List<String> imagesUrl, String description, Category category, Double price, List<Review> reviews) {
         super();
         this.name = name;
         this.imagesUrl = imagesUrl;
         this.description = description;
         this.category = category;
         this.price = price;
+        this.reviews = reviews;
         this.generateSlug(name);
     }
 
@@ -107,12 +110,15 @@ public class Product extends BaseEntity {
     public Set<User> getUserFavorite() {
         return userFavorite;
     }
-    public void addFavorite(User user){
+
+    public void addFavorite(User user) {
         this.userFavorite.add(user);
     }
-    public void removeFavorite(User user){
+
+    public void removeFavorite(User user) {
         this.userFavorite.remove(user);
     }
+
     public void setUserFavorite(Set<User> userFavorite) {
         this.userFavorite = userFavorite;
     }
@@ -125,7 +131,7 @@ public class Product extends BaseEntity {
         this.slug = slug;
     }
 
-    public void generateSlug(String name){
+    public void generateSlug(String name) {
         Pattern NONLATIN = Pattern.compile("[^\\w-]");
         Pattern WHITESPACE = Pattern.compile("[\\s]");
         String nowhitespace = WHITESPACE.matcher(name).replaceAll("-");
@@ -139,4 +145,28 @@ public class Product extends BaseEntity {
         return (this.name + this.description).toLowerCase();
     }
 
+
+    public List<Review> getReviews() {
+        return reviews;
+    }
+
+    public void setReviews(List<Review> reviews) {
+        this.reviews = reviews;
+    }
+
+    public void addReview(Review review) {
+        reviews.add(review);
+    }
+
+    public void deleteReview(Review review) {
+        reviews.remove(review);
+    }
+
+    public Boolean getActive() {
+        return active;
+    }
+
+    public void setActive(Boolean active) {
+        this.active = active;
+    }
 }

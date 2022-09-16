@@ -3,6 +3,7 @@ package com.example.ecommerce.controllers;
 import com.example.ecommerce.dto.cart.AddToCartDto;
 import com.example.ecommerce.dto.cart.CartGetDto;
 import com.example.ecommerce.dto.cart.CartItemDto;
+import com.example.ecommerce.dto.cart.ChangeQuantityDto;
 import com.example.ecommerce.exceptions.NotFoundException;
 import com.example.ecommerce.service.CartService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,7 +30,7 @@ public class CartController {
     }
 
     @PostMapping()
-    public ResponseEntity<CartItemDto> addToCart(@Valid @RequestBody AddToCartDto cart){
+    public ResponseEntity<CartItemDto> addToCart(@Valid @RequestBody AddToCartDto cart) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String username = authentication.getName();
 
@@ -37,18 +38,19 @@ public class CartController {
     }
 
     @GetMapping("")
-    public ResponseEntity<CartGetDto> getCart(){
+    public ResponseEntity<CartGetDto> getCart() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String username = authentication.getName();
         return new ResponseEntity<>(service.getCartItems(username), HttpStatus.OK);
 
     }
+
     @PutMapping("")
-    public ResponseEntity<AddToCartDto> changeQuantity(@Valid @RequestBody AddToCartDto cart ){
-        if(cart.getId() == null){
+    public ResponseEntity<ChangeQuantityDto> changeQuantity(@Valid @RequestBody ChangeQuantityDto cart) {
+        if (cart.getId() == null) {
             throw new NotFoundException("Cart item not found");
         }
         service.changeQuantity(cart);
-        return new ResponseEntity<>(new AddToCartDto(cart.getId(), cart.getProductId(), cart.getQuantity()), HttpStatus.OK);
+        return new ResponseEntity<>(new ChangeQuantityDto(cart.getId(), cart.getQuantity()), HttpStatus.OK);
     }
 }
