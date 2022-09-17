@@ -1,12 +1,16 @@
 package com.example.ecommerce.dto.product;
 
+
+import com.example.ecommerce.dto.review.ReviewGetDto;
 import com.example.ecommerce.model.BaseEntity;
 import com.example.ecommerce.model.Product;
+import com.example.ecommerce.model.Review;
 
 import javax.validation.constraints.NotNull;
+import java.util.ArrayList;
 import java.util.List;
 
-public class ProductsGetDto extends BaseEntity {
+public class ProductReviewsGetDto extends BaseEntity {
     private @NotNull String name;
     private @NotNull List<String> imagesUrl;
     private @NotNull double price;
@@ -17,9 +21,11 @@ public class ProductsGetDto extends BaseEntity {
     private @NotNull Double rating;
     private @NotNull Integer ratingCount;
     private @NotNull String slug;
+    private @NotNull List<ReviewGetDto> reviews = new ArrayList<>();
+
 
     // ProductDto from product
-    public ProductsGetDto(Product product, Boolean isFavorite) {
+    public ProductReviewsGetDto(Product product, Boolean isFavorite) {
         this.id = product.getId();
         this.createdAt = product.getCreatedAt();
         this.modifiedAt = product.getModifiedAt();
@@ -33,9 +39,13 @@ public class ProductsGetDto extends BaseEntity {
         this.slug = product.getSlug();
         this.rating = product.getAvarageRating();
         this.ratingCount = product.getReviews().size();
+        for (Review review :
+                product.getReviews()) {
+            this.addReview(review);
+        }
     }
 
-    public ProductsGetDto(Integer id, String name, List<String> imagesUrl, double price, String description, Integer categoryId, String categoryName, Boolean isFavorite) {
+    public ProductReviewsGetDto(Integer id, String name, List<String> imagesUrl, double price, String description, Integer categoryId, String categoryName, Boolean isFavorite) {
         this.id = id;
         this.name = name;
         this.imagesUrl = imagesUrl;
@@ -125,5 +135,21 @@ public class ProductsGetDto extends BaseEntity {
 
     public void setRatingCount(Integer ratingCount) {
         this.ratingCount = ratingCount;
+    }
+
+    public void addReview(Review review) {
+        this.reviews.add(new ReviewGetDto(review));
+    }
+
+    public void deleteReview(ReviewGetDto review) {
+        this.reviews.remove(review);
+    }
+
+    public List<ReviewGetDto> getReviews() {
+        return reviews;
+    }
+
+    public void setReviews(List<ReviewGetDto> reviews) {
+        this.reviews = reviews;
     }
 }

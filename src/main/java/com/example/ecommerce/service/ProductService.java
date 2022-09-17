@@ -3,6 +3,7 @@ package com.example.ecommerce.service;
 import com.example.ecommerce.Utils.ProductMapper;
 import com.example.ecommerce.dto.product.ProductDto;
 import com.example.ecommerce.dto.product.ProductEditDto;
+import com.example.ecommerce.dto.product.ProductReviewsGetDto;
 import com.example.ecommerce.dto.product.ProductsGetDto;
 import com.example.ecommerce.exceptions.NotFoundException;
 import com.example.ecommerce.model.Category;
@@ -22,6 +23,7 @@ public class ProductService {
     private final CategoryRepository categoryRepository;
     private final CartRepository cartRepository;
     private final ProductMapper mapper;
+
     @Autowired
     public ProductService(ProductRepository productRepository, CategoryRepository categoryRepository, CartRepository cartRepository, ProductMapper mapper) {
         this.productRepository = productRepository;
@@ -108,7 +110,7 @@ public class ProductService {
             throw new NotFoundException("Product with id " + id + " doesnt exist");
         }
         cartRepository.deleteAllByProduct(tempProduct.get());
-        tempProduct.get().getUserFavorite().forEach(user->user.deleteFavorite(tempProduct.get()));
+        tempProduct.get().getUserFavorite().forEach(user -> user.deleteFavorite(tempProduct.get()));
         productRepository.deleteById(id);
     }
 
@@ -119,9 +121,9 @@ public class ProductService {
             throw new NotFoundException("Product with id " + id + " doesnt exist");
         }
         mapper.updateProductFromDto(product, tempProduct.get());
-        if(product.getCategoryId() != null){
+        if (product.getCategoryId() != null) {
             Optional<Category> tempCategory = categoryRepository.findById(product.getCategoryId());
-            if(tempCategory.isEmpty()){
+            if (tempCategory.isEmpty()) {
                 throw new NotFoundException("Category with id " + id + " doesnt exist");
             }
             tempProduct.get().setCategory(tempCategory.get());
@@ -129,12 +131,14 @@ public class ProductService {
         return productRepository.save(tempProduct.get());
     }
 
-    public Product getProductBySlug(String slug) {
+    public ProductReviewsGetDto getProductBySlug(String slug) {
         Optional<Product> tempProduct = productRepository.findBySlug(slug);
         if (tempProduct.isEmpty()) {
             throw new NotFoundException("Product with slug " + slug + " doesnt exist");
         }
-        return tempProduct.get();
+        ProductReviewsGetDto product = new ProductReviewsGetDto(tempProduct.get(), false);
+        System.out.println(product.getReviews());
+        return product;
 
     }
 }

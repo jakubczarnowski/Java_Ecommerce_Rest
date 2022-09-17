@@ -3,6 +3,7 @@ package com.example.ecommerce.controllers;
 import com.example.ecommerce.config.ApiResponse;
 import com.example.ecommerce.dto.product.ProductDto;
 import com.example.ecommerce.dto.product.ProductEditDto;
+import com.example.ecommerce.dto.product.ProductReviewsGetDto;
 import com.example.ecommerce.dto.product.ProductsGetDto;
 import com.example.ecommerce.model.Product;
 import com.example.ecommerce.service.ProductService;
@@ -37,21 +38,25 @@ public class ProductController {
     public ResponseEntity<Product> getProduct(@PathVariable Integer id) {
         return new ResponseEntity<>(productService.getProductById(id), HttpStatus.OK);
     }
+
     // there should be a better way to do this, would do that just with id but i cant assign id to slug as its unsaved yet, maybe front generation would be better #TODO
     @GetMapping("/slug/{slug}")
-    public ResponseEntity<Product> getProductBySlug(@PathVariable String slug) {
+    public ResponseEntity<ProductReviewsGetDto> getProductBySlug(@PathVariable String slug) {
         return new ResponseEntity<>(productService.getProductBySlug(slug), HttpStatus.OK);
     }
+
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PatchMapping("{id}")
     public ResponseEntity<Product> updateProduct(@PathVariable Integer id, @Valid @RequestBody ProductEditDto product) {
         return new ResponseEntity<>(productService.updateProduct(id, product), HttpStatus.OK);
     }
+
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PostMapping
     public ResponseEntity<Product> createProduct(@Valid @RequestBody ProductDto product) {
         return new ResponseEntity<>(productService.createProduct(product), HttpStatus.CREATED);
     }
+
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @DeleteMapping("{id}")
     public ResponseEntity<ApiResponse> deleteProduct(@Valid @PathVariable Integer id) {

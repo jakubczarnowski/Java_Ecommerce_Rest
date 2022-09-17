@@ -169,4 +169,18 @@ public class Product extends BaseEntity {
     public void setActive(Boolean active) {
         this.active = active;
     }
+
+    public Double getAvarageRating() {
+        double sum = 0d;
+        for (Review review :
+                this.getReviews()) {
+            sum += review.rating;
+        }
+        System.out.println(sum);
+        System.out.println(this.getReviews().size());
+        if (this.getReviews().size() == 0) {
+            return 0d;
+        }
+        return sum / this.getReviews().size();
+    }
 }
