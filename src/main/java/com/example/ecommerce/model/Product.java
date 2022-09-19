@@ -5,14 +5,12 @@ import com.example.ecommerce.model.converter.StringListConverter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
+import org.springframework.lang.Nullable;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.text.Normalizer;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Locale;
-import java.util.Set;
+import java.util.*;
 import java.util.regex.Pattern;
 
 @Entity
@@ -27,8 +25,9 @@ public class Product extends BaseEntity {
     private @NotNull Double price;
     private @NotNull String slug;
 
-    @OneToMany()
-    private List<Review> reviews;
+    @Nullable
+    @OneToMany(fetch = FetchType.LAZY)
+    private List<Review> reviews = new ArrayList<>();
     @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "category_id", nullable = false)

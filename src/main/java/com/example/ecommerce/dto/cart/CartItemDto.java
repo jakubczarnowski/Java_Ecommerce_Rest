@@ -15,11 +15,13 @@ public class CartItemDto {
         this.quantity = quantity;
         this.product = product;
     }
-    public CartItemDto(Cart cart){
+
+    public CartItemDto(Cart cart) {
         this.id = cart.getId();
         this.quantity = cart.getQuantity();
         this.product = cart.getProduct();
     }
+
     public Integer getId() {
         return id;
     }
