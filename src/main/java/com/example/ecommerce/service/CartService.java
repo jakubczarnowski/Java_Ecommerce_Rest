@@ -51,6 +51,7 @@ public class CartService {
         CartGetDto cart = new CartGetDto();
         for (Cart item :
                 cartItems) {
+            System.out.println(item);
             cart.addCartItem(new CartItemDto(item));
         }
         cart.calculateTotalCost();

@@ -28,6 +28,16 @@ public class Cart extends BaseEntity {
         this.quantity = quantity;
     }
 
+    @Override
+    public String toString() {
+        return "Cart{" +
+                "product=" + product +
+                ", user=" + user +
+                ", quantity=" + quantity +
+                ", active=" + active +
+                '}';
+    }
+
     public Product getProduct() {
         return product;
     }

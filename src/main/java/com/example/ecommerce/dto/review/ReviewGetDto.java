@@ -6,6 +6,7 @@ import javax.validation.constraints.NotNull;
 import java.util.Date;
 
 public class ReviewGetDto {
+    @NotNull Integer id;
     @NotNull String name;
     @NotNull Date postDate;
     @NotNull String review;
@@ -15,6 +16,7 @@ public class ReviewGetDto {
     }
 
     public ReviewGetDto(Review review) {
+        this.id = review.getId();
         this.name = review.getUser().getName() + " " + review.getUser().getSurname();
         this.postDate = Date.from(review.getCreatedAt());
         this.review = review.getReview();
