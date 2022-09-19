@@ -1,16 +1,16 @@
 package com.example.ecommerce.dto.cart;
 
+import com.example.ecommerce.dto.product.ProductsGetDto;
 import com.example.ecommerce.model.Cart;
-import com.example.ecommerce.model.Product;
 
 import javax.validation.constraints.NotNull;
 
 public class CartItemDto {
     private Integer id;
     private @NotNull Integer quantity;
-    private @NotNull Product product;
+    private @NotNull ProductsGetDto product;
 
-    public CartItemDto(Integer id, Integer quantity, Product product) {
+    public CartItemDto(Integer id, Integer quantity, ProductsGetDto product) {
         this.id = id;
         this.quantity = quantity;
         this.product = product;
@@ -19,7 +19,7 @@ public class CartItemDto {
     public CartItemDto(Cart cart) {
         this.id = cart.getId();
         this.quantity = cart.getQuantity();
-        this.product = cart.getProduct();
+        this.product = new ProductsGetDto(cart.getProduct(), false);
     }
 
     public Integer getId() {
@@ -38,11 +38,11 @@ public class CartItemDto {
         this.quantity = quantity;
     }
 
-    public Product getProduct() {
+    public ProductsGetDto getProduct() {
         return product;
     }
 
-    public void setProduct(Product product) {
+    public void setProduct(ProductsGetDto product) {
         this.product = product;
     }
 }

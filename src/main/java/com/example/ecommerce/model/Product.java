@@ -33,7 +33,7 @@ public class Product extends BaseEntity {
     @JoinColumn(name = "category_id", nullable = false)
     Category category;
 
-    @ManyToMany(mappedBy = "favorite")
+    @ManyToMany(mappedBy = "favorite", fetch = FetchType.LAZY)
     @JsonIgnore
     private Set<User> userFavorite = new HashSet<User>();
 
@@ -169,10 +169,10 @@ public class Product extends BaseEntity {
         this.active = active;
     }
 
-    public Double getAvarageRating() {
+    public Double getAverageRating() {
         double sum = 0d;
         for (Review review :
-                this.getReviews()) {
+                this.reviews) {
             sum += review.rating;
         }
         System.out.println(sum);
@@ -180,6 +180,10 @@ public class Product extends BaseEntity {
         if (this.getReviews().size() == 0) {
             return 0d;
         }
-        return sum / this.getReviews().size();
+        return sum / this.reviews.size();
+    }
+
+    public Integer getReviewsCount() {
+        return this.reviews.size();
     }
 }

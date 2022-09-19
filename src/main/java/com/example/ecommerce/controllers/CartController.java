@@ -41,7 +41,9 @@ public class CartController {
     public ResponseEntity<CartGetDto> getCart() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String username = authentication.getName();
-        return new ResponseEntity<>(service.getCartItems(username), HttpStatus.OK);
+        CartGetDto cartGetDto = service.getCartItems(username);
+        System.out.println("kurwa");
+        return new ResponseEntity<>(cartGetDto, HttpStatus.OK);
     }
 
     @PutMapping("")

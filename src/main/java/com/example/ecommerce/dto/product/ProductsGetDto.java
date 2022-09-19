@@ -31,8 +31,8 @@ public class ProductsGetDto extends BaseEntity {
         this.categoryName = product.getCategory().getCategoryName();
         this.isFavorite = isFavorite;
         this.slug = product.getSlug();
-        this.rating = product.getAvarageRating();
-        this.ratingCount = product.getReviews().size();
+        this.rating = product.getAverageRating();
+        this.ratingCount = product.getReviewsCount();
     }
 
     public ProductsGetDto(Integer id, String name, List<String> imagesUrl, double price, String description, Integer categoryId, String categoryName, Boolean isFavorite) {

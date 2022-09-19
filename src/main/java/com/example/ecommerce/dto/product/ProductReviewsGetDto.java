@@ -37,7 +37,7 @@ public class ProductReviewsGetDto extends BaseEntity {
         this.categoryName = product.getCategory().getCategoryName();
         this.isFavorite = isFavorite;
         this.slug = product.getSlug();
-        this.rating = product.getAvarageRating();
+        this.rating = product.getAverageRating();
         this.ratingCount = product.getReviews().size();
         for (Review review :
                 product.getReviews()) {
