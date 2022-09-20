@@ -6,6 +6,9 @@ public class TokenRefreshRequest {
     @NotBlank
     String refreshToken;
 
+    public TokenRefreshRequest() {
+    }
+
     public TokenRefreshRequest(String refreshToken) {
         this.refreshToken = refreshToken;
     }
