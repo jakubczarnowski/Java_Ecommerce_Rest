@@ -1,16 +1,18 @@
 package com.example.ecommerce.dto.order;
 
+import com.example.ecommerce.dto.cart.CartItemDto;
 import com.example.ecommerce.model.Cart;
 import com.example.ecommerce.model.DeliveryAddress;
 import com.example.ecommerce.model.EPaymentStatus;
 import com.example.ecommerce.model.Order;
 
 import java.util.Date;
+import java.util.HashSet;
 import java.util.Set;
 
 public class OrderGetDto {
     private Integer id;
-    private Set<Cart> cartItems;
+    private Set<CartItemDto> cartItems = new HashSet<>();
     private Double totalCost;
     private EPaymentStatus paymentStatus;
     private DeliveryAddress deliveryAddress;
@@ -38,7 +40,10 @@ public class OrderGetDto {
     }
 
     public OrderGetDto(Set<Cart> cartItems, Double totalCost, EPaymentStatus paymentStatus, DeliveryAddress deliveryAddress, String moreInfo, Boolean active, Date timeOrdered, EPaymentStatus status) {
-        this.cartItems = cartItems;
+        for (Cart cart :
+                cartItems) {
+            this.cartItems.add(new CartItemDto(cart));
+        }
         this.totalCost = totalCost;
         this.paymentStatus = paymentStatus;
         this.deliveryAddress = deliveryAddress;
@@ -49,7 +54,10 @@ public class OrderGetDto {
     }
 
     public OrderGetDto(Order order) {
-        this.cartItems = order.getCartItems();
+        for (Cart cart :
+                order.getCartItems()) {
+            this.cartItems.add(new CartItemDto(cart));
+        }
         this.totalCost = order.getTotalCost();
         this.paymentStatus = order.getPaymentStatus();
         this.deliveryAddress = order.getDeliveryAddress();
@@ -59,11 +67,11 @@ public class OrderGetDto {
         this.id = order.getId();
     }
 
-    public Set<Cart> getCartItems() {
+    public Set<CartItemDto> getCartItems() {
         return cartItems;
     }
 
-    public void setCartItems(Set<Cart> cartItems) {
+    public void setCartItems(Set<CartItemDto> cartItems) {
         this.cartItems = cartItems;
     }
 

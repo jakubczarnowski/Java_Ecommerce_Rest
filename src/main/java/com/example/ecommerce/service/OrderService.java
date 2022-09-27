@@ -43,7 +43,7 @@ public class OrderService {
             throw new UserNotValidException("Address doesnt belong to the user");
         }
         List<Cart> cartItems = cartRepository.findAllByUserId(user.getId());
-        Order order = new Order(user, Set.copyOf(cartItems), Utilities.calculateTotalCartCost(cartItems), EPaymentStatus.PROCESSING, deliveryAddress.get(), orderCreateDto.getMoreInfo());
+        Order order = new Order(user, Set.copyOf(cartItems), Utilities.calculateTotalCartCost(Set.copyOf(cartItems)), EPaymentStatus.PROCESSING, deliveryAddress.get(), orderCreateDto.getMoreInfo());
         orderRepository.save(order);
         cartRepository.deleteAllByUserId(user.getId());
         return new OrderGetDto(order);
@@ -77,6 +77,15 @@ public class OrderService {
             throw new NotFoundException("Order not found");
         }
         order.get().setActive(false);
+        orderRepository.save(order.get());
+    }
+
+    public void changePaymentStatus(EPaymentStatus paymentStatus, Integer orderId) {
+        Optional<Order> order = orderRepository.findById(orderId);
+        if (order.isEmpty()) {
+            throw new NotFoundException("Order not found");
+        }
+        order.get().setPaymentStatus(paymentStatus);
         orderRepository.save(order.get());
     }
 }

@@ -24,7 +24,6 @@ public class RefreshTokenService {
 
     @Autowired
     public RefreshTokenService(RefreshTokenRepository refreshTokenRepository, UserRepository userRepository) {
-        this.refreshTokenDurationMs = refreshTokenDurationMs;
         this.refreshTokenRepository = refreshTokenRepository;
         this.userRepository = userRepository;
     }

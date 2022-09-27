@@ -1,9 +1,8 @@
 package com.example.ecommerce.service;
 
-import com.example.ecommerce.Utils.Utilities;
-import com.example.ecommerce.model.Cart;
+import com.example.ecommerce.model.Order;
 import com.example.ecommerce.model.User;
-import com.example.ecommerce.repository.CartRepository;
+import com.example.ecommerce.repository.OrderRepository;
 import com.example.ecommerce.repository.UserRepository;
 import com.stripe.Stripe;
 import com.stripe.model.PaymentIntent;
@@ -12,27 +11,34 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
-import java.util.List;
+import javax.persistence.EntityNotFoundException;
+import java.util.Optional;
 
 @Component
 public class StripeClient {
-    @Autowired
-    CartRepository cartRepository;
-    @Autowired
     UserRepository userRepository;
+    OrderRepository orderRepository;
     @Value("${ecommerce.app.stripe.privateKey}")
     private String API_SECRET_KEY;
 
-    public StripeClient() {
+    @Autowired
+    public StripeClient(OrderRepository orderRepository, UserRepository userRepository) {
+        this.orderRepository = orderRepository;
+        this.userRepository = userRepository;
     }
 
-    public String chargeNewCard(String username) throws Exception {
+    public String chargeNewCard(String username, Integer order_id) throws Exception {
         Stripe.apiKey = API_SECRET_KEY;
         User user = userRepository.findByUsername(username).get();
-        List<Cart> cartItems = cartRepository.findAllByUserId(user.getId());
-        Double amount = Utilities.calculateTotalCartCost(cartItems);
+        Optional<Order> order = orderRepository.findById(order_id);
+        if (order.isEmpty()) {
+            throw new EntityNotFoundException("Order Not Found");
+        }
+
+        Double amount = order.get().getTotalCost();
         PaymentIntentCreateParams params =
                 PaymentIntentCreateParams.builder()
+                        .putMetadata("order_id", String.valueOf(order_id))
                         .setAmount(amount.longValue() * 100)
                         .setCurrency("usd")
                         .setAutomaticPaymentMethods(
@@ -45,7 +51,7 @@ public class StripeClient {
 
         // Create a PaymentIntent with the order amount and currency
         PaymentIntent paymentIntent = PaymentIntent.create(params);
-
+        System.out.println(paymentIntent.toJson());
         return paymentIntent.getClientSecret();
     }
 
