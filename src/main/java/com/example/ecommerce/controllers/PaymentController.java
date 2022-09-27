@@ -11,6 +11,8 @@ import com.stripe.net.Webhook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.json.GsonJsonParser;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -25,7 +27,7 @@ import java.util.Map;
 public class PaymentController {
     private final StripeClient stripeClient;
     private final OrderService orderService;
-    @Value("ecommerce.app.stripe.webhook")
+    @Value("${ecommerce.app.stripe.webhook}")
     String endpointSecret;
 
     @Autowired
@@ -43,7 +45,7 @@ public class PaymentController {
     }
 
     @PostMapping(value = "/webhook")
-    public String confirmPayment(@RequestBody String payload, @RequestHeader("Stripe-Signature") String sigHeader) {
+    public ResponseEntity<String> confirmPayment(@RequestBody String payload, @RequestHeader("Stripe-Signature") String sigHeader) {
         Event event = null;
 
         try {
@@ -52,9 +54,9 @@ public class PaymentController {
             );
         } catch (SignatureVerificationException e) {
             // Invalid signature
-            return "";
+            return new ResponseEntity<>("Invalid Signature", HttpStatus.BAD_REQUEST);
         } catch (Exception e) {
-            return "";
+            return new ResponseEntity<>("Something went wrong", HttpStatus.INTERNAL_SERVER_ERROR);
         }
         // Deserialize the nested object inside the event
         EventDataObjectDeserializer dataObjectDeserializer = event.getDataObjectDeserializer();
@@ -86,6 +88,6 @@ public class PaymentController {
             default:
                 System.out.println("Unhandled event type: " + event.getType());
         }
-        return "";
+        return new ResponseEntity<>("", HttpStatus.OK);
     }
 }
