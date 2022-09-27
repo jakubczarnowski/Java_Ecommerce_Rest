@@ -9,6 +9,7 @@ import com.stripe.model.EventDataObjectDeserializer;
 import com.stripe.model.StripeObject;
 import com.stripe.net.Webhook;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.json.GsonJsonParser;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
@@ -24,7 +25,8 @@ import java.util.Map;
 public class PaymentController {
     private final StripeClient stripeClient;
     private final OrderService orderService;
-    String endpointSecret = "whsec_ba610366b2c081856f300440ba2c6b36929ee02ba45e980681bdc7b089fb8de9";
+    @Value("ecommerce.app.stripe.webhook")
+    String endpointSecret;
 
     @Autowired
     public PaymentController(StripeClient stripeClient, OrderService orderService) {
