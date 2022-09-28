@@ -1,12 +1,18 @@
 package com.example.ecommerce.model;
 
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
+
 import javax.persistence.Entity;
 import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
+// Preventing orders without shipping
 @Entity
-@Table(name="deliveryAddress")
+@SQLDelete(sql = "UPDATE products SET active = false WHERE id = ?")
+@Where(clause = "active = 1")
+@Table(name = "deliveryAddress")
 public class DeliveryAddress extends BaseEntity {
     @NotNull(message = "Pick the name of the address")
     @NotBlank(message = "Name cannot be empty")
@@ -24,6 +30,8 @@ public class DeliveryAddress extends BaseEntity {
     @NotBlank(message = "zipCode cannot be empty")
     private @NotNull String zipCode;
 
+    private Boolean active = true;
+
     public DeliveryAddress() {
     }
 
@@ -34,6 +42,7 @@ public class DeliveryAddress extends BaseEntity {
         this.city = city;
         this.zipCode = zipCode;
     }
+
     public DeliveryAddress(DeliveryAddress address) {
         this.name = address.getName();
         this.streetLine = address.getStreetLine();
@@ -41,6 +50,7 @@ public class DeliveryAddress extends BaseEntity {
         this.city = address.getCity();
         this.zipCode = address.getZipCode();
     }
+
     public String getName() {
         return name;
     }
@@ -79,5 +89,13 @@ public class DeliveryAddress extends BaseEntity {
 
     public void setZipCode(String zipCode) {
         this.zipCode = zipCode;
+    }
+
+    public Boolean getActive() {
+        return active;
+    }
+
+    public void setActive(Boolean active) {
+        this.active = active;
     }
 }
