@@ -1,7 +1,6 @@
 package com.example.ecommerce.model;
 
 import org.hibernate.annotations.SQLDelete;
-import org.hibernate.annotations.Where;
 
 import javax.persistence.Entity;
 import javax.persistence.Table;
@@ -11,7 +10,6 @@ import javax.validation.constraints.NotNull;
 // Preventing orders without shipping
 @Entity
 @SQLDelete(sql = "UPDATE products SET active = false WHERE id = ?")
-@Where(clause = "active = 1")
 @Table(name = "deliveryAddress")
 public class DeliveryAddress extends BaseEntity {
     @NotNull(message = "Pick the name of the address")

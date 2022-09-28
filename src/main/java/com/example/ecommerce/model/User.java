@@ -1,5 +1,7 @@
 package com.example.ecommerce.model;
 
+import org.hibernate.annotations.Where;
+
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
@@ -46,6 +48,7 @@ public class User extends BaseEntity {
             inverseJoinColumns = @JoinColumn(name = "product_id"))
     private Set<Product> favorite = new HashSet<>();
 
+    @Where(clause = "active = 1")
     @OneToMany(cascade = CascadeType.REMOVE, orphanRemoval = true)
     private Set<DeliveryAddress> addresses = new HashSet<>();
 
