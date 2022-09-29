@@ -3,6 +3,7 @@ package com.example.ecommerce.service;
 import com.example.ecommerce.Utils.Utilities;
 import com.example.ecommerce.dto.order.OrderCreateDto;
 import com.example.ecommerce.dto.order.OrderGetDto;
+import com.example.ecommerce.exceptions.NoItemsInOrderException;
 import com.example.ecommerce.exceptions.NotFoundException;
 import com.example.ecommerce.exceptions.UserNotValidException;
 import com.example.ecommerce.model.*;
@@ -43,6 +44,9 @@ public class OrderService {
             throw new UserNotValidException("Address doesnt belong to the user");
         }
         List<Cart> cartItems = cartRepository.findAllByUserId(user.getId());
+        if (cartItems.size() == 0) {
+            throw new NoItemsInOrderException("No items in order");
+        }
         Order order = new Order(user, Set.copyOf(cartItems), Utilities.calculateTotalCartCost(Set.copyOf(cartItems)), EPaymentStatus.PROCESSING, deliveryAddress.get(), orderCreateDto.getMoreInfo());
         orderRepository.save(order);
         cartRepository.deleteAllByUserId(user.getId());
