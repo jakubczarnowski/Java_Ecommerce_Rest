@@ -12,6 +12,7 @@
     <artifactId>ecommerce</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>ecommerce</name>
+    <packaging>jar</packaging>
     <description>Ecommerce application</description>
     <properties>
         <java.version>17</java.version>
@@ -73,13 +74,13 @@
         <dependency>
             <groupId>org.jetbrains</groupId>
             <artifactId>annotations</artifactId>
-            <version>RELEASE</version>
+            <version>23.0.0</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>org.mapstruct</groupId>
             <artifactId>mapstruct</artifactId>
-            <version>1.4.2.Final</version>
+            <version>1.5.2.Final</version>
         </dependency>
     </dependencies>
 
