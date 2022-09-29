@@ -44,6 +44,7 @@ public class OrderService {
             throw new UserNotValidException("Address doesnt belong to the user");
         }
         List<Cart> cartItems = cartRepository.findAllByUserId(user.getId());
+        
         if (cartItems.size() == 0) {
             throw new NoItemsInOrderException("No items in order");
         }

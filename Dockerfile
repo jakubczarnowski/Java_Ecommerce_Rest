@@ -1,20 +1,15 @@
-FROM openjdk:11 as mysqldoc
-EXPOSE 8084
-WORKDIR /app
+#
+# Build stage
+#
+FROM maven:3.8.3-openjdk-17 AS build
+COPY src /home/app/src
+COPY pom.xml /home/app
+RUN mvn -f /home/app/pom.xml clean package -D skipTests
 
-# Copy maven executable to the image
-COPY mvnw .
-COPY .mvn .mvn
-
-# Copy the pom.xml file
-COPY pom.xml .
-
-# Copy the project source
-COPY ./src ./src
-COPY ./pom.xml ./pom.xml
-
-RUN chmod 755 /app/mvnw
-
-RUN ./mvnw dependency:go-offline -B
-
-ENTRYPOINT ["java","-jar","target/ecommerce-0.0.1-SNAPSHOT.jar"]
+#
+# Package stage
+#
+FROM openjdk:17
+COPY --from=build /home/app/target/ecommerce-0.0.1-SNAPSHOT.jar /usr/local/lib/ecommerce-0.0.1-SNAPSHOT.jar
+EXPOSE 8080
+ENTRYPOINT ["java","-jar","/usr/local/lib/ecommerce-0.0.1-SNAPSHOT.jar"]

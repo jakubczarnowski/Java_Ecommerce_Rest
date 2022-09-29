@@ -1,6 +1,7 @@
 package com.example.ecommerce.service;
 
 import com.example.ecommerce.Utils.ProductMapper;
+import com.example.ecommerce.Utils.ProductSort;
 import com.example.ecommerce.dto.product.ProductDto;
 import com.example.ecommerce.dto.product.ProductEditDto;
 import com.example.ecommerce.dto.product.ProductReviewsGetDto;
@@ -53,9 +54,29 @@ public class ProductService {
     }
 
     // Get all
-    public List<ProductsGetDto> getProducts(int page, int size, String search, Integer categoryId) {
+    public List<ProductsGetDto> getProducts(int page, int size, String search, Integer categoryId, ProductSort sort) {
         List<Product> productsList = productRepository.findAll();
         List<ProductsGetDto> newProductList = new ArrayList<>();
+
+        // New way to sort things, usefull later but for right now i want to move on
+//        EntityManagerFactory emfactory = Persistence.createEntityManagerFactory( "Product_Jpa" );
+//        EntityManager entitymanager = emfactory.createEntityManager( );
+//        CriteriaBuilder criteriaBuilder = entitymanager.getCriteriaBuilder();
+//        CriteriaQuery<Object> criteriaQuery = criteriaBuilder.createQuery();
+//        Root<Product> from = criteriaQuery.from(Product.class);
+//
+//        //select all records
+//        CriteriaQuery<Object> select = criteriaQuery.select(from);
+//        TypedQuery<Object> typedQuery = entitymanager.createQuery(select);
+//        List<Object> resultlist = typedQuery.getResultList();
+//
+//        Session session = ;
+//        CriteriaBuilder cb = session.getCriteriaBuilder();
+//        CriteriaQuery<Product> criteriaQuery = cb.createQuery(Product.class);
+//        Root<Product> from = criteriaQuery.from(Product.class);
+//        CriteriaQuery<Product> select = criteriaQuery.select(from);
+//        criteriaQuery.orderBy(cb.asc(from.get("price")));
+
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
         // my own pagination solution, don't try this
         // cant really figure it out the right way
@@ -137,7 +158,6 @@ public class ProductService {
             throw new NotFoundException("Product with slug " + slug + " doesnt exist");
         }
         ProductReviewsGetDto product = new ProductReviewsGetDto(tempProduct.get(), false);
-        System.out.println(product.getReviews());
         return product;
 
     }
