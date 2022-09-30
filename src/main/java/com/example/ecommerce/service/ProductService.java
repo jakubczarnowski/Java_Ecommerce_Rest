@@ -124,6 +124,7 @@ public class ProductService {
         return productRepository.save(newProduct);
     }
 
+    // test
     // Delete, {id}
     public void removeProductById(Integer id) {
         Optional<Product> tempProduct = productRepository.findById(id);
