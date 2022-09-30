@@ -11,7 +11,8 @@ import java.util.List;
 
 @Service
 public class ImagesStorageService {
-    String resourcePath = "C:\\EcommercePictures\\"; // TODO change for macos, currently saving in root path
+    String resourcePath = "/var/lib/ecommerceImages/"; // TODO change for macos, currently saving in root path
+
     public void save(MultipartFile file, String imageName) throws IOException {
         // Files storage in a local directory
         Files.createDirectories(Paths.get(resourcePath));
@@ -22,9 +23,11 @@ public class ImagesStorageService {
             throw new RuntimeException("Could not store the file. Error: " + e.getMessage());
         }
     }
+
     public void deleteAll(List<String> fileNames) {
         //todo
     }
+
     public byte[] getImage(String imageName) throws IOException {
         Path path = Paths.get(resourcePath + imageName);
         byte[] arr = Files.readAllBytes(path);

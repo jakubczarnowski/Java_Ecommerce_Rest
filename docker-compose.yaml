@@ -22,7 +22,8 @@ services:
     restart: on-failure
     ports:
       - "8080:8080"
-
+    volumes:
+      - ./ecommerceImages/:/var/lib/ecommerceImages
     build:
       context: "./"
       dockerfile: "Dockerfile"
