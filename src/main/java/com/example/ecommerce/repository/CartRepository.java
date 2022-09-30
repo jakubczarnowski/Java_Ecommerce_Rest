@@ -25,5 +25,7 @@ public interface CartRepository extends JpaRepository<Cart, Integer> {
 
     Boolean existsByProductAndUserAndActiveTrue(Product product, User user);
 
-    void deleteAllByProduct(Product product);
+    @Modifying
+    @Query("update Cart c set c.active=false where c.product.id =:id")
+    void deleteAllByProductId(@Param("id") Integer id);
 }

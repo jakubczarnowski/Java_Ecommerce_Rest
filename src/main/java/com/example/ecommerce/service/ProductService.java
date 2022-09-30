@@ -130,7 +130,7 @@ public class ProductService {
         if (tempProduct.isEmpty()) {
             throw new NotFoundException("Product with id " + id + " doesnt exist");
         }
-        cartRepository.deleteAllByProduct(tempProduct.get());
+        cartRepository.deleteAllByProductId(tempProduct.get().getId());
         tempProduct.get().getUserFavorite().forEach(user -> user.deleteFavorite(tempProduct.get()));
         productRepository.deleteById(id);
     }
