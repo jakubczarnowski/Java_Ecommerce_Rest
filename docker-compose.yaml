@@ -3,7 +3,7 @@ version: "3.8"
 services:
   mysqldb:
     container_name: "mysqldb"
-    image: arm64v8/mysql
+    image: mysql
     environment:
       - MYSQL_ROOT_PASSWORD=root1
       - MYSQL_DATABASE=ecommerce
