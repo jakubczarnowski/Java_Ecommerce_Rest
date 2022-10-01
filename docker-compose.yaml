@@ -29,4 +29,5 @@ services:
     expose:
       - "8080"
     depends_on:
-      - mysqldb
+      mysqldb:
+        condition: service_healthy
