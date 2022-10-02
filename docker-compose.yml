@@ -11,7 +11,7 @@ services:
       - MYSQL_PASSWORD=root1
 
     ports:
-      - "3307:3306"
+      - "3306:3306"
     healthcheck:
       test: [ "CMD", "mysqladmin" ,"ping", "-h", "localhost" ]
       timeout: 20s
@@ -21,13 +21,14 @@ services:
     container_name: "ecommerce"
     restart: on-failure
     ports:
-      - "80:80"
+      - "8080:8080"
     volumes:
       - ./ecommerceImages/:/var/lib/ecommerceImages
     build:
       context: "./"
       dockerfile: "Dockerfile"
-
+    expose:
+      - "8080"
     depends_on:
       mysqldb:
         condition: service_healthy
