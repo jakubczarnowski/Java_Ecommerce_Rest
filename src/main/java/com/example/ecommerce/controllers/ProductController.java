@@ -1,6 +1,5 @@
 package com.example.ecommerce.controllers;
 
-import com.example.ecommerce.Utils.ProductSort;
 import com.example.ecommerce.config.ApiResponse;
 import com.example.ecommerce.dto.product.ProductDto;
 import com.example.ecommerce.dto.product.ProductEditDto;
@@ -29,11 +28,9 @@ public class ProductController {
             @RequestParam(required = false, name = "size",
                     defaultValue = "20") int size,
             @RequestParam(required = false, name = "search", defaultValue = "") String search,
-            @RequestParam(required = false, name = "categoryId", defaultValue = "1") Integer categoryId,
-            @RequestParam(required = false, name = "sort", defaultValue = "RELEVANCE") ProductSort sort
+            @RequestParam(required = false, name = "categoryId", defaultValue = "1") Integer categoryId
     ) {
-        System.out.println(size);
-        return new ResponseEntity<>(productService.getProducts(page, size, search, categoryId, sort), HttpStatus.OK);
+        return new ResponseEntity<>(productService.getProducts(page, size, search, categoryId), HttpStatus.OK);
     }
 
     @GetMapping("{id}")

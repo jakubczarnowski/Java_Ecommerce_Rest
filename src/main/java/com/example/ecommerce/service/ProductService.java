@@ -1,7 +1,6 @@
 package com.example.ecommerce.service;
 
 import com.example.ecommerce.Utils.ProductMapper;
-import com.example.ecommerce.Utils.ProductSort;
 import com.example.ecommerce.dto.product.ProductDto;
 import com.example.ecommerce.dto.product.ProductEditDto;
 import com.example.ecommerce.dto.product.ProductReviewsGetDto;
@@ -54,7 +53,7 @@ public class ProductService {
     }
 
     // Get all
-    public List<ProductsGetDto> getProducts(int page, int size, String search, Integer categoryId, ProductSort sort) {
+    public List<ProductsGetDto> getProducts(int page, int size, String search, Integer categoryId) {
         List<Product> productsList = productRepository.findAll();
         List<ProductsGetDto> newProductList = new ArrayList<>();
 
