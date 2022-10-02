@@ -48,6 +48,7 @@ public class OrderService {
         if (cartItems.size() == 0) {
             throw new NoItemsInOrderException("No items in order");
         }
+
         Order order = new Order(user, Set.copyOf(cartItems), Utilities.calculateTotalCartCost(Set.copyOf(cartItems)), EPaymentStatus.PROCESSING, deliveryAddress.get(), orderCreateDto.getMoreInfo());
         orderRepository.save(order);
         cartRepository.deleteAllByUserId(user.getId());
