@@ -8,7 +8,7 @@ services:
       - MYSQL_ROOT_PASSWORD=root1
       - MYSQL_DATABASE=ecommerce
       - MYSQL_USER=root1
-      - MYSQL_PASSWORD=root12
+      - MYSQL_PASSWORD=root1
 
     volumes:
       - ./db_data:/var/lib/mysql
