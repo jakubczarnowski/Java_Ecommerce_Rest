@@ -25,7 +25,7 @@ services:
     container_name: "ecommerce"
     restart: on-failure
     ports:
-      - "80:80"
+      - "8443:8443"
     volumes:
       - ./ecommerceImages/:/var/lib/ecommerceImages
     build:
