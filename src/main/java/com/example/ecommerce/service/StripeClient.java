@@ -51,7 +51,7 @@ public class StripeClient {
 
         // Create a PaymentIntent with the order amount and currency
         PaymentIntent paymentIntent = PaymentIntent.create(params);
-        System.out.println(paymentIntent.toJson());
+        System.out.println(paymentIntent);
         return paymentIntent.getClientSecret();
     }
 

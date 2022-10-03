@@ -47,7 +47,7 @@ public class PaymentController {
     @PostMapping(value = "/webhook")
     public ResponseEntity<String> confirmPayment(@RequestBody String payload, @RequestHeader("Stripe-Signature") String sigHeader) {
         Event event = null;
-
+        // TODO cleanup later
         try {
             event = Webhook.constructEvent(
                     payload, sigHeader, endpointSecret
