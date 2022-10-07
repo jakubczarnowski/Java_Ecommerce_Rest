@@ -1,6 +1,9 @@
 package com.example.ecommerce.dto.authorization;
 
-import javax.validation.constraints.*;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 public class RegisterDto {
     @NotNull
@@ -22,6 +25,9 @@ public class RegisterDto {
     @NotBlank
     @Size(min = 6, max = 40)
     private String password;
+
+    public RegisterDto() {
+    }
 
     public RegisterDto(String username, String email, String name, String surname, String password) {
         this.username = username;
